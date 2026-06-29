@@ -76,6 +76,208 @@ footer {
 </style>
 """
 
+APP_PAGE_CSS = """
+<style>
+:root {
+  --qx-bg: #f5f7fb;
+  --qx-panel: #ffffff;
+  --qx-panel-soft: #f8fafc;
+  --qx-border: #d9e1ec;
+  --qx-text: #172033;
+  --qx-muted: #667085;
+  --qx-accent: #e5484d;
+  --qx-accent-hover: #d7353d;
+  --qx-green-bg: #e8f7ee;
+  --qx-green-text: #087443;
+}
+
+.stApp {
+  background: var(--qx-bg);
+  color: var(--qx-text);
+}
+
+[data-testid="stHeader"] {
+  background: transparent;
+}
+
+[data-testid="stSidebar"] {
+  background: #eef2f7;
+  border-right: 1px solid var(--qx-border);
+}
+
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+  gap: 0.65rem;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label {
+  border-radius: 8px;
+  padding: 0.32rem 0.42rem;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label:hover {
+  background: #e3e9f2;
+}
+
+[data-testid="stMainBlockContainer"],
+.block-container {
+  max-width: 1180px;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+h1 {
+  color: var(--qx-text);
+  font-size: 2.35rem !important;
+  line-height: 1.14 !important;
+  margin-bottom: 0.35rem !important;
+}
+
+h2, h3 {
+  color: var(--qx-text);
+  letter-spacing: 0;
+}
+
+[data-testid="stCaptionContainer"] {
+  color: var(--qx-muted);
+}
+
+[data-testid="stForm"],
+[data-testid="stExpander"],
+[data-testid="stFileUploader"],
+[data-testid="stDataFrame"],
+[data-testid="stJson"] {
+  border-radius: 8px;
+}
+
+[data-testid="stForm"] {
+  background: var(--qx-panel);
+  border: 1px solid var(--qx-border);
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+[data-testid="stFileUploader"] section {
+  background: var(--qx-panel-soft);
+  border: 1px dashed #b7c3d4;
+  border-radius: 8px;
+}
+
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-baseweb="select"] > div {
+  border-radius: 8px !important;
+  border-color: #cfd8e6 !important;
+  background: #f9fbfd !important;
+}
+
+[data-testid="stTextInput"] input:focus,
+[data-testid="stNumberInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus {
+  border-color: #7a8da8 !important;
+  box-shadow: 0 0 0 1px #7a8da8 inset !important;
+}
+
+[data-testid="stTextInput"] input:disabled {
+  color: #596579;
+  -webkit-text-fill-color: #596579;
+  background: #eef2f7 !important;
+}
+
+.stButton > button,
+.stDownloadButton > button,
+[data-testid="stFormSubmitButton"] button {
+  border-radius: 8px;
+  font-weight: 650;
+  border: 1px solid #cbd5e1;
+  min-height: 2.45rem;
+}
+
+.stButton > button[kind="primary"],
+.stDownloadButton > button[kind="primary"],
+[data-testid="stFormSubmitButton"] button[kind="primary"] {
+  background: var(--qx-accent);
+  border-color: var(--qx-accent);
+}
+
+.stButton > button[kind="primary"]:hover,
+.stDownloadButton > button[kind="primary"]:hover,
+[data-testid="stFormSubmitButton"] button[kind="primary"]:hover {
+  background: var(--qx-accent-hover);
+  border-color: var(--qx-accent-hover);
+}
+
+[data-testid="stTabs"] [role="tablist"] {
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--qx-border);
+}
+
+[data-testid="stTabs"] [role="tab"] {
+  border-radius: 8px 8px 0 0;
+  padding: 0.55rem 0.8rem;
+}
+
+[data-testid="stTabs"] [aria-selected="true"] {
+  background: var(--qx-panel);
+  color: var(--qx-text);
+}
+
+[data-testid="stAlert"] {
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+[data-testid="stAlert"]:has([data-testid="stMarkdownContainer"] p) {
+  box-shadow: none;
+}
+
+[data-testid="stSuccess"] {
+  background: var(--qx-green-bg);
+  color: var(--qx-green-text);
+}
+
+.qx-shell-title {
+  font-size: 0.78rem;
+  color: #667085;
+  letter-spacing: 0;
+  margin: 0.25rem 0 0.35rem;
+}
+
+.qx-shell-brand {
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: #172033;
+  margin-bottom: 0.8rem;
+}
+
+.qx-page-kicker {
+  color: #667085;
+  font-size: 0.85rem;
+  margin-bottom: 0.15rem;
+}
+
+.qx-page-title {
+  color: #172033;
+  font-size: 2.25rem;
+  font-weight: 760;
+  line-height: 1.15;
+  margin: 0 0 1.2rem;
+}
+
+.qx-page-hero {
+  background: #ffffff;
+  border: 1px solid #d9e1ec;
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem 1.2rem;
+  margin-bottom: 1.15rem;
+}
+
+code,
+pre {
+  border-radius: 8px !important;
+}
+</style>
+"""
+
 import sys
 
 for path in (GIL_WORKFLOW_DIR, GIA_CAMERA_DIR, GIA_COMPONENT_IMPORT_DIR):
@@ -1231,7 +1433,6 @@ def page_components_builder() -> None:
 
 
 def page_import_variables() -> None:
-    st.header("导入变量")
     st.caption("上传结构体 JSON、结构体定义 GIA 或地图 GIL 后，按字段可视化编辑一个结构体值，并导出为 P2Gia 同格式的数据结构 JSON。")
 
     structs_doc: dict[str, Any] | None = None
@@ -1407,7 +1608,6 @@ def page_story_gil_export() -> None:
 
 
 def page_export_component() -> None:
-    st.header("导出元件")
     # st.caption("工程类导出能力集中在这里，避免可视化剧情页加载过多逻辑。")
     tab_story, tab_structs, tab_components = st.tabs(
         ["story.txt 写入 GIL", "导出结构体 JSON", "components JSON 构建 GIL"]
@@ -1421,7 +1621,6 @@ def page_export_component() -> None:
 
 
 def page_camera_generator() -> None:
-    st.header("镜头 GIA 生成")
     with st.form("camera_gia"):
         col_a, col_b, col_c = st.columns(3)
         with col_a:
@@ -1479,9 +1678,29 @@ def page_camera_generator() -> None:
         st.download_button("下载镜头 GIA", data, file_name=output_name)
 
 
+def render_tool_page_header(page: str) -> None:
+    descriptions = {
+        "导入变量": "从结构体定义生成可导入的结构体数据 JSON。",
+        "导出元件": "把剧情文本、结构体和 components JSON 写入地图 GIL。",
+        "镜头 GIA 生成": "生成滑动变焦镜头组 GIA。",
+    }
+    st.markdown(
+        f"""
+        <div class="qx-page-hero">
+          <div class="qx-page-kicker">Miliastra Wonderland Tooling</div>
+          <div class="qx-page-title">{page}</div>
+          <div class="qx-shell-title">{descriptions.get(page, "千星工具箱")}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def main() -> None:
     st.set_page_config(page_title="千星工具箱", layout="wide")
 
+    st.sidebar.title("千星工具箱")
+    st.sidebar.caption("GIL / GIA workflow")
     page = st.sidebar.radio(
         "功能",
         [
@@ -1495,13 +1714,16 @@ def main() -> None:
     if page == "可视化剧情构建":
         page_story_builder()
     elif page == "导入变量":
-        st.title("千星工具箱")
+        st.markdown(APP_PAGE_CSS, unsafe_allow_html=True)
+        render_tool_page_header(page)
         page_import_variables()
     elif page == "导出元件":
-        st.title("千星工具箱")
+        st.markdown(APP_PAGE_CSS, unsafe_allow_html=True)
+        render_tool_page_header(page)
         page_export_component()
     elif page == "镜头 GIA 生成":
-        st.title("千星工具箱")
+        st.markdown(APP_PAGE_CSS, unsafe_allow_html=True)
+        render_tool_page_header(page)
         page_camera_generator()
 
 
