@@ -1319,9 +1319,26 @@ def page_import_variables() -> None:
 
 def page_story_gil_export() -> None:
     st.subheader("story.txt 写入地图 GIL")
+    story_input_mode = st.radio(
+        "story.txt 输入方式",
+        ["上传文件", "直接输入"],
+        horizontal=True,
+        key="story_gil_export_input_mode",
+    )
     with st.form("story_to_gil"):
         input_gil_upload = st.file_uploader("关卡 .gil", type=["gil"], key="story_gil_export_gil")
-        story_upload = st.file_uploader("story_board 导出的 story.txt", type=["txt"], key="story_gil_export_txt")
+        story_upload = None
+        story_text_input = ""
+        if story_input_mode == "上传文件":
+            story_upload = st.file_uploader("story_board 导出的 story.txt", type=["txt"], key="story_gil_export_txt")
+        else:
+            story_text_input = st.text_area(
+                "story.txt 内容",
+                value="",
+                height=260,
+                placeholder="每行格式：status|文本1;文本2|next1;next2",
+                key="story_gil_export_text_input",
+            )
         template_upload = st.file_uploader("Template.gil，可不传", type=["gil"], key="story_gil_export_template")
         component_name = st.text_input(
             "新增元件名称",
@@ -1340,8 +1357,21 @@ def page_story_gil_export() -> None:
         submitted = st.form_submit_button("生成处理后的 GIL", type="primary")
 
     if submitted:
-        if not input_gil_upload or not story_upload:
-            st.error("需要上传关卡 .gil 和 story.txt。")
+        if not input_gil_upload:
+            st.error("需要上传关卡 .gil。")
+            return
+        if story_input_mode == "上传文件":
+            if not story_upload:
+                st.error("需要上传 story.txt。")
+                return
+            story_text = read_text_upload(story_upload)
+        else:
+            story_text = story_text_input.strip()
+            if not story_text:
+                st.error("需要输入 story.txt 内容。")
+                return
+        if not any(line.strip() for line in story_text.splitlines()):
+            st.error("story.txt 内容不能为空。")
             return
         component_name = component_name.strip()
         if not component_name:
@@ -1363,7 +1393,7 @@ def page_story_gil_export() -> None:
                 summary = build_story_gil(
                     input_gil,
                     template_gil,
-                    read_text_upload(story_upload),
+                    story_text,
                     component_name,
                     output_gil,
                     int(max_lines),
