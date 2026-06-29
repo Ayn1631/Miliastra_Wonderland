@@ -13,6 +13,16 @@ def utf8_child(field: dict[str, Any] | None, field_no: int) -> str | None:
     return child.get("utf8") if child else None
 
 
+def nested_varint_value(message: dict[str, Any], path: list[int]) -> int | None:
+    current = message
+    for field_no in path[:-1]:
+        current = first_field(children(current), field_no)
+        if current is None:
+            return None
+    value = varint(children(current), path[-1])
+    return value if isinstance(value, int) else None
+
+
 def extract_struct_part(part: dict[str, Any]) -> dict[str, Any]:
     struct_id = varint(children(part), 1)
     struct_name = utf8_child(part, 501)
@@ -27,14 +37,17 @@ def extract_struct_part(part: dict[str, Any]) -> dict[str, Any]:
         field_index = varint(item_children, 503)
         if not isinstance(type_code, int):
             continue
-        fields.append(
-            {
-                "index": field_index,
-                "name": field_name,
-                "type_code": type_code,
-                "type": TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}"),
-            }
-        )
+        field_doc = {
+            "index": field_index,
+            "name": field_name,
+            "type_code": type_code,
+            "type": TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}"),
+        }
+        nested_struct_id = nested_varint_value(item, [1, 2, 2])
+        if nested_struct_id is not None and type_code in (25, 26):
+            key_name = "element_struct_id" if type_code == 26 else "struct_id"
+            field_doc[key_name] = nested_struct_id
+        fields.append(field_doc)
 
     fields.sort(key=lambda item: item["index"] if isinstance(item.get("index"), int) else 10**9)
     return {

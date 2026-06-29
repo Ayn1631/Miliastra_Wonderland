@@ -1232,12 +1232,12 @@ def page_components_builder() -> None:
 
 def page_import_variables() -> None:
     st.header("导入变量")
-    st.caption("上传结构体 JSON 或结构体定义 GIA 后，按字段可视化编辑一个结构体值，并导出为 P2Gia 同格式的数据结构 JSON。")
+    st.caption("上传结构体 JSON、结构体定义 GIA 或地图 GIL 后，按字段可视化编辑一个结构体值，并导出为 P2Gia 同格式的数据结构 JSON。")
 
     structs_doc: dict[str, Any] | None = None
     structs_upload = st.file_uploader(
-        "上传结构体格式 structs.json 或 数据结构.gia",
-        type=["json", "gia"],
+        "上传结构体格式 structs.json、数据结构.gia 或 地图.gil",
+        type=["json", "gia", "gil"],
         key="visual_structs_source",
     )
     if structs_upload:
@@ -1248,12 +1248,12 @@ def page_import_variables() -> None:
                     json.loads(read_text_upload(structs_upload)),
                     source_name=structs_upload.name,
                 )
-            elif suffix == ".gia":
-                with tempfile.TemporaryDirectory(prefix="qx_struct_schema_gia_") as tmp:
+            elif suffix in (".gia", ".gil"):
+                with tempfile.TemporaryDirectory(prefix="qx_struct_schema_source_") as tmp:
                     source_path = write_upload(structs_upload, Path(tmp) / structs_upload.name)
-                    structs_doc = extract_structs_from_gia_schema(source_path)
+                    structs_doc = extract_structs_by_uploaded_format(source_path)
             else:
-                raise ValueError("只支持 .json 或 .gia。")
+                raise ValueError("只支持 .json、.gia 或 .gil。")
             struct_count = int(structs_doc.get("struct_count") or len(structs_doc.get("structs", [])))
             source_format = structs_doc.get("source_format") or suffix.lstrip(".")
             extraction_mode = structs_doc.get("extraction_mode") or "structs_json"
@@ -1263,7 +1263,7 @@ def page_import_variables() -> None:
             structs_doc = None
 
     if not structs_doc or not structs_doc.get("structs"):
-        st.info("先上传从“导出结构体 JSON”得到的 structs.json，或上传包含结构体定义的 数据结构.gia。")
+        st.info("先上传从“导出结构体 JSON”得到的 structs.json，或上传包含结构体定义的 数据结构.gia / 地图.gil。")
         return
 
     struct_names = [
