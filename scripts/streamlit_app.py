@@ -271,6 +271,60 @@ h2, h3 {
   margin-bottom: 1.15rem;
 }
 
+.qx-field-table-title {
+  color: #667085;
+  font-size: 0.82rem;
+  margin: 0 0 0.35rem;
+}
+
+.qx-field-head {
+  color: #475467;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #eef2f7;
+  border: 1px solid #d9e1ec;
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+
+.qx-field-name {
+  color: #172033;
+  font-weight: 700;
+  padding-top: 0.42rem;
+}
+
+.qx-field-meta {
+  color: #667085;
+  font-size: 0.78rem;
+}
+
+.qx-type-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.2rem 0.52rem;
+  border-radius: 999px;
+  background: #eef2f7;
+  border: 1px solid #d9e1ec;
+  color: #344054;
+  font-size: 0.8rem;
+  font-weight: 650;
+  margin-top: 0.28rem;
+}
+
+.qx-field-divider {
+  height: 1px;
+  background: #e3e8f0;
+  margin: 0.55rem 0;
+}
+
+.qx-nested-note {
+  color: #667085;
+  font-size: 0.8rem;
+  margin: -0.15rem 0 0.45rem;
+}
+
 code,
 pre {
   border-radius: 8px !important;
@@ -938,29 +992,37 @@ def list_text_to_values(text: str, type_code: int) -> list[Any]:
     return values
 
 
-def render_scalar_field_input(field: dict[str, Any], key: str) -> Any:
+def render_scalar_field_input(field: dict[str, Any], key: str, *, compact: bool = False) -> Any:
     field_name = str(field.get("name") or "")
     type_code = int(field.get("type_code", 0))
     type_name = field.get("type") or TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}")
     label = f"{field_name} ({type_name})"
+    label_visibility = "collapsed" if compact else "visible"
     if type_code == 6:
-        return st.text_input(label, value="", key=key)
+        return st.text_input(label, value="", key=key, label_visibility=label_visibility)
     if type_code == 3:
-        return int(st.number_input(label, value=0, step=1, key=key))
+        return int(st.number_input(label, value=0, step=1, key=key, label_visibility=label_visibility))
     if type_code == 5:
-        return float(st.number_input(label, value=0.0, key=key))
+        return float(st.number_input(label, value=0.0, key=key, label_visibility=label_visibility))
     if type_code == 4:
-        return st.checkbox(label, value=False, key=key)
+        return st.checkbox(label, value=False, key=key, label_visibility=label_visibility)
     if type_code in (11, 8, 9, 10, 24):
         help_text = "一行一个值，也可以用英文逗号分隔。"
-        text = st.text_area(label, value="", help=help_text, key=key)
+        text = st.text_area(
+            label,
+            value="",
+            help=help_text,
+            key=key,
+            height=84 if compact else None,
+            label_visibility=label_visibility,
+        )
         return list_text_to_values(text, type_code)
     if type_code == 12:
         cols = st.columns(3)
         return {
-            "x": float(cols[0].number_input(f"{field_name}.x", value=0.0, key=f"{key}_x")),
-            "y": float(cols[1].number_input(f"{field_name}.y", value=0.0, key=f"{key}_y")),
-            "z": float(cols[2].number_input(f"{field_name}.z", value=0.0, key=f"{key}_z")),
+            "x": float(cols[0].number_input("x", value=0.0, key=f"{key}_x")),
+            "y": float(cols[1].number_input("y", value=0.0, key=f"{key}_y")),
+            "z": float(cols[2].number_input("z", value=0.0, key=f"{key}_z")),
         }
     st.caption(f"{label} 暂按默认空值导出。")
     return default_value_for_type(type_code)
@@ -975,70 +1037,103 @@ def render_struct_value_editor(
     max_depth: int = 3,
 ) -> dict[str, Any]:
     value: dict[str, Any] = {}
+    st.markdown('<div class="qx-field-table-title">字段表格编辑</div>', unsafe_allow_html=True)
+    header_cols = st.columns([1.5, 1.0, 3.7])
+    header_cols[0].markdown('<div class="qx-field-head">字段</div>', unsafe_allow_html=True)
+    header_cols[1].markdown('<div class="qx-field-head">类型</div>', unsafe_allow_html=True)
+    header_cols[2].markdown('<div class="qx-field-head">值</div>', unsafe_allow_html=True)
+
     for field in struct_doc.get("fields", []):
         field_name = str(field.get("name") or "").strip()
         if not field_name:
             continue
         type_code = int(field.get("type_code", 0))
+        type_name = field.get("type") or TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}")
         field_key = f"{key_prefix}_{field_name}_{type_code}_{depth}"
+        st.markdown('<div class="qx-field-divider"></div>', unsafe_allow_html=True)
+        field_cols = st.columns([1.5, 1.0, 3.7])
+        field_cols[0].markdown(
+            f"""
+            <div class="qx-field-name">{field_name}</div>
+            <div class="qx-field-meta">#{field.get("index", "")}</div>
+            """,
+            unsafe_allow_html=True,
+        )
+        field_cols[1].markdown(
+            f'<span class="qx-type-pill">{type_name}</span>',
+            unsafe_allow_html=True,
+        )
+
         if type_code == 25:
             nested_doc = resolve_nested_struct_doc(field, structs_doc)
-            st.text_input(
-                f"{field_name} (struct) 的结构体类型",
-                value=nested_struct_label(nested_doc),
-                disabled=True,
-                key=f"{field_key}_struct_fixed",
-            )
-            if nested_doc and depth < max_depth:
-                with st.expander(f"编辑 {field_name}", expanded=True):
-                    value[field_name] = render_struct_value_editor(
-                        nested_doc,
-                        structs_doc,
-                        f"{field_key}_nested",
-                        depth=depth + 1,
-                        max_depth=max_depth,
-                    )
-            else:
-                if not nested_doc:
-                    st.error(f"{field_name} 的结构定义里没有可解析的内层结构体类型。")
-                value[field_name] = {}
-            continue
-        if type_code == 26:
-            nested_doc = resolve_nested_struct_doc(field, structs_doc)
-            st.text_input(
-                f"{field_name} (struct_list) 的元素结构体类型",
-                value=nested_struct_label(nested_doc),
-                disabled=True,
-                key=f"{field_key}_struct_list_fixed",
-            )
-            count = int(st.number_input(
-                f"{field_name} 数量",
-                min_value=0,
-                max_value=200,
-                value=1,
-                step=1,
-                key=f"{field_key}_count",
-            ))
-            items: list[dict[str, Any]] = []
-            for index in range(count):
+            with field_cols[2]:
+                st.text_input(
+                    f"{field_name} (struct) 的结构体类型",
+                    value=nested_struct_label(nested_doc),
+                    disabled=True,
+                    key=f"{field_key}_struct_fixed",
+                    label_visibility="collapsed",
+                )
                 if nested_doc and depth < max_depth:
-                    with st.expander(f"{field_name} #{index + 1}", expanded=index == 0):
-                        items.append(
-                            render_struct_value_editor(
-                                nested_doc,
-                                structs_doc,
-                                f"{field_key}_item_{index}",
-                                depth=depth + 1,
-                                max_depth=max_depth,
-                            )
+                    with st.expander(f"编辑 {field_name}", expanded=True):
+                        value[field_name] = render_struct_value_editor(
+                            nested_doc,
+                            structs_doc,
+                            f"{field_key}_nested",
+                            depth=depth + 1,
+                            max_depth=max_depth,
                         )
                 else:
                     if not nested_doc:
-                        st.error(f"{field_name} 的结构定义里没有可解析的元素结构体类型。")
-                    items.append({})
-            value[field_name] = items
+                        st.error(f"{field_name} 的结构定义里没有可解析的内层结构体类型。")
+                    value[field_name] = {}
             continue
-        value[field_name] = render_scalar_field_input(field, field_key)
+        if type_code == 26:
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            with field_cols[2]:
+                sub_cols = st.columns([3, 1])
+                sub_cols[0].text_input(
+                    f"{field_name} (struct_list) 的元素结构体类型",
+                    value=nested_struct_label(nested_doc),
+                    disabled=True,
+                    key=f"{field_key}_struct_list_fixed",
+                    label_visibility="collapsed",
+                )
+                count = int(
+                    sub_cols[1].number_input(
+                        "数量",
+                        min_value=0,
+                        max_value=200,
+                        value=1,
+                        step=1,
+                        key=f"{field_key}_count",
+                    )
+                )
+                st.markdown(
+                    '<div class="qx-nested-note">列表项按下方展开区逐项编辑。</div>',
+                    unsafe_allow_html=True,
+                )
+                items: list[dict[str, Any]] = []
+                for index in range(count):
+                    if nested_doc and depth < max_depth:
+                        with st.expander(f"{field_name} #{index + 1}", expanded=index == 0):
+                            items.append(
+                                render_struct_value_editor(
+                                    nested_doc,
+                                    structs_doc,
+                                    f"{field_key}_item_{index}",
+                                    depth=depth + 1,
+                                    max_depth=max_depth,
+                                )
+                            )
+                    else:
+                        if not nested_doc:
+                            st.error(f"{field_name} 的结构定义里没有可解析的元素结构体类型。")
+                        items.append({})
+                value[field_name] = items
+            continue
+        with field_cols[2]:
+            value[field_name] = render_scalar_field_input(field, field_key, compact=True)
     return value
 
 
