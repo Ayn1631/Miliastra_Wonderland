@@ -391,13 +391,33 @@ def write_upload(uploaded_file: Any, path: Path) -> Path:
 
 
 def read_text_upload(uploaded_file: Any) -> str:
-    raw = uploaded_file.getvalue()
+    return decode_text_bytes(uploaded_file.getvalue())
+
+
+def decode_text_bytes(raw: bytes) -> str:
     for encoding in ("utf-8-sig", "utf-8", "gb18030"):
         try:
             return raw.decode(encoding)
         except UnicodeDecodeError:
             continue
     return raw.decode("utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def parse_structs_upload_cached(file_name: str, raw: bytes) -> dict[str, Any]:
+    suffix = Path(file_name).suffix.lower()
+    if suffix == ".json":
+        return normalize_structs_doc(
+            json.loads(decode_text_bytes(raw)),
+            source_name=file_name,
+        )
+    if suffix in (".gia", ".gil"):
+        with tempfile.TemporaryDirectory(prefix="qx_struct_schema_source_") as tmp:
+            source_path = Path(tmp) / file_name
+            source_path.parent.mkdir(parents=True, exist_ok=True)
+            source_path.write_bytes(raw)
+            return extract_structs_by_uploaded_format(source_path)
+    raise ValueError("只支持 .json、.gia 或 .gil。")
 
 
 def default_components_json_text() -> str:
@@ -1446,26 +1466,25 @@ def page_extract_structs() -> None:
     st.header("导出结构体 JSON")
     uploaded = st.file_uploader("上传 .gil 或 .gia", type=["gil", "gia"], key="extract_structs_source")
     if st.button("导出结构体", type="primary", disabled=uploaded is None):
-        with tempfile.TemporaryDirectory(prefix="qx_structs_") as tmp:
-            suffix = Path(uploaded.name).suffix.lower()
-            input_path = write_upload(uploaded, Path(tmp) / f"input{suffix}")
-            try:
-                result = extract_structs_by_uploaded_format(input_path)
-            except Exception as exc:
-                st.exception(exc)
-                return
-            data = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
-            st.success(
-                f"已识别为 {result.get('source_format', suffix.lstrip('.')).upper()}，"
-                f"提取到 {result.get('struct_count', 0)} 个结构体"
-            )
-            st.json(result, expanded=False)
-            st.download_button(
-                "下载 structs.json",
-                data.encode("utf-8"),
-                file_name=f"{Path(uploaded.name).stem}.structs.json",
-                mime="application/json",
-            )
+        suffix = Path(uploaded.name).suffix.lower()
+        try:
+            with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
+                result = parse_structs_upload_cached(uploaded.name, uploaded.getvalue())
+        except Exception as exc:
+            st.exception(exc)
+            return
+        data = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+        st.success(
+            f"已识别为 {result.get('source_format', suffix.lstrip('.')).upper()}，"
+            f"提取到 {result.get('struct_count', 0)} 个结构体"
+        )
+        st.json(result, expanded=False)
+        st.download_button(
+            "下载 structs.json",
+            data.encode("utf-8"),
+            file_name=f"{Path(uploaded.name).stem}.structs.json",
+            mime="application/json",
+        )
 
 
 def page_components_builder() -> None:
@@ -1539,17 +1558,8 @@ def page_import_variables() -> None:
     if structs_upload:
         try:
             suffix = Path(structs_upload.name).suffix.lower()
-            if suffix == ".json":
-                structs_doc = normalize_structs_doc(
-                    json.loads(read_text_upload(structs_upload)),
-                    source_name=structs_upload.name,
-                )
-            elif suffix in (".gia", ".gil"):
-                with tempfile.TemporaryDirectory(prefix="qx_struct_schema_source_") as tmp:
-                    source_path = write_upload(structs_upload, Path(tmp) / structs_upload.name)
-                    structs_doc = extract_structs_by_uploaded_format(source_path)
-            else:
-                raise ValueError("只支持 .json、.gia 或 .gil。")
+            with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
+                structs_doc = parse_structs_upload_cached(structs_upload.name, structs_upload.getvalue())
             struct_count = int(structs_doc.get("struct_count") or len(structs_doc.get("structs", [])))
             source_format = structs_doc.get("source_format") or suffix.lstrip(".")
             extraction_mode = structs_doc.get("extraction_mode") or "structs_json"
