@@ -1,0 +1,29 @@
+{
+  "components": [
+    {
+      "name": "DemoComponent",
+      "variables": [
+        {
+          "name": "title",
+          "type": "str",
+          "value": "示例元件"
+        },
+        {
+          "name": "sections",
+          "type": "str_list",
+          "value": ["1", "2", "3"]
+        },
+        {
+          "name": "count",
+          "type": "int",
+          "value": 3
+        },
+        {
+          "name": "enabled",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

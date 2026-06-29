@@ -1,0 +1,238 @@
+{
+  "file": "scripts\\resources\\gil_inputs\\塔露斯伊.gil",
+  "size": 3938307,
+  "struct_count": 5,
+  "structs": [
+    {
+      "id": 1077936129,
+      "name": "StoryNode",
+      "field_count": 3,
+      "fields": [
+        {
+          "index": 1,
+          "name": "status",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "next",
+          "type_code": 8,
+          "type": "int_list"
+        }
+      ],
+      "schema_offset": 3856134,
+      "schema_length": 304
+    },
+    {
+      "id": 1077936130,
+      "name": "Story",
+      "field_count": 1,
+      "fields": [
+        {
+          "index": 1,
+          "name": "Story_List",
+          "type_code": 26,
+          "type": "struct_list"
+        }
+      ],
+      "schema_offset": 3856441,
+      "schema_length": 200
+    },
+    {
+      "id": 1077936131,
+      "name": "Btn",
+      "field_count": 3,
+      "fields": [
+        {
+          "index": 1,
+          "name": "选项卡索引",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 2,
+          "name": "选项卡文本",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 3,
+          "name": "next",
+          "type_code": 3,
+          "type": "int"
+        }
+      ],
+      "schema_offset": 3856644,
+      "schema_length": 372
+    },
+    {
+      "id": 1077936132,
+      "name": "Message",
+      "field_count": 2,
+      "fields": [
+        {
+          "index": 1,
+          "name": "User",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 2,
+          "name": "msssage",
+          "type_code": 6,
+          "type": "str"
+        }
+      ],
+      "schema_offset": 3857019,
+      "schema_length": 224
+    },
+    {
+      "id": 1077936133,
+      "name": "拾取提示",
+      "field_count": 2,
+      "fields": [
+        {
+          "index": 1,
+          "name": "物品",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "数量",
+          "type_code": 3,
+          "type": "int"
+        }
+      ],
+      "schema_offset": 3857246,
+      "schema_length": 238
+    }
+  ],
+  "structs_by_name": {
+    "StoryNode": 1077936129,
+    "Story": 1077936130,
+    "Btn": 1077936131,
+    "Message": 1077936132,
+    "拾取提示": 1077936133
+  },
+  "structs_by_id": {
+    "1077936129": {
+      "id": 1077936129,
+      "name": "StoryNode",
+      "field_count": 3,
+      "fields": [
+        {
+          "index": 1,
+          "name": "status",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "next",
+          "type_code": 8,
+          "type": "int_list"
+        }
+      ],
+      "schema_offset": 3856134,
+      "schema_length": 304
+    },
+    "1077936130": {
+      "id": 1077936130,
+      "name": "Story",
+      "field_count": 1,
+      "fields": [
+        {
+          "index": 1,
+          "name": "Story_List",
+          "type_code": 26,
+          "type": "struct_list"
+        }
+      ],
+      "schema_offset": 3856441,
+      "schema_length": 200
+    },
+    "1077936131": {
+      "id": 1077936131,
+      "name": "Btn",
+      "field_count": 3,
+      "fields": [
+        {
+          "index": 1,
+          "name": "选项卡索引",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 2,
+          "name": "选项卡文本",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 3,
+          "name": "next",
+          "type_code": 3,
+          "type": "int"
+        }
+      ],
+      "schema_offset": 3856644,
+      "schema_length": 372
+    },
+    "1077936132": {
+      "id": 1077936132,
+      "name": "Message",
+      "field_count": 2,
+      "fields": [
+        {
+          "index": 1,
+          "name": "User",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 2,
+          "name": "msssage",
+          "type_code": 6,
+          "type": "str"
+        }
+      ],
+      "schema_offset": 3857019,
+      "schema_length": 224
+    },
+    "1077936133": {
+      "id": 1077936133,
+      "name": "拾取提示",
+      "field_count": 2,
+      "fields": [
+        {
+          "index": 1,
+          "name": "物品",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "数量",
+          "type_code": 3,
+          "type": "int"
+        }
+      ],
+      "schema_offset": 3857246,
+      "schema_length": 238
+    }
+  }
+}

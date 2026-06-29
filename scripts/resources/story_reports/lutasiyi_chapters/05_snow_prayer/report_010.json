@@ -1,0 +1,264 @@
+{
+    "structId": "1077936130",
+    "type": "Struct",
+    "value": [
+        {
+            "param_type": "StructList",
+            "value": {
+                "structId": "1077936129",
+                "value": [
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "我深深吸了一口档案室里带着古旧纸张气味的空气，闭上眼睛，将自己的声音，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "91"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "通过这块正被风之精灵温柔触碰的石板，清晰地送到了三千年前的极寒雪原上。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "92"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“谁？是谁在说话？！”少女惊愕地后退了一步，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "93"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "不可置信地看着那块黑色的石板。不仅是她，崖壁下那些冻得奄奄一息的族人们，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "94"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "也纷纷用敬畏、震惊的目光望向这边。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "95"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "5"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“族长女儿，请不要戒备。”卢卡连忙上前一步，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "96"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "5"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "双手将石板高高举起，神色无比虔诚，“这位是石板另一端的‘神秘长官’。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "97"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "5"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "他来自极其遥远的未来……是他刚才告诉我你们的位置，指引我带人过来寻找你们的！”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "98"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“未来的……长官？”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "99"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "少女怔怔地看着石板。她走上前来，蹲在卢卡身前，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "100"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

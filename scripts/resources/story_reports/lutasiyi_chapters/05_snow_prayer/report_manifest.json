@@ -1,0 +1,92 @@
+{
+    "source": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_sources\\05_snow_prayer.txt",
+    "max_lines_per_file": 10,
+    "total_lines": 156,
+    "formula": {
+        "file_no_1_based": "next // max_lines_per_file + 1",
+        "line_no_1_based": "next % max_lines_per_file + 1",
+        "line_index_0_based": "next % max_lines_per_file"
+    },
+    "files": [
+        {
+            "file": "report_001.json",
+            "start_next": 0,
+            "end_next": 9
+        },
+        {
+            "file": "report_002.json",
+            "start_next": 10,
+            "end_next": 19
+        },
+        {
+            "file": "report_003.json",
+            "start_next": 20,
+            "end_next": 29
+        },
+        {
+            "file": "report_004.json",
+            "start_next": 30,
+            "end_next": 39
+        },
+        {
+            "file": "report_005.json",
+            "start_next": 40,
+            "end_next": 49
+        },
+        {
+            "file": "report_006.json",
+            "start_next": 50,
+            "end_next": 59
+        },
+        {
+            "file": "report_007.json",
+            "start_next": 60,
+            "end_next": 69
+        },
+        {
+            "file": "report_008.json",
+            "start_next": 70,
+            "end_next": 79
+        },
+        {
+            "file": "report_009.json",
+            "start_next": 80,
+            "end_next": 89
+        },
+        {
+            "file": "report_010.json",
+            "start_next": 90,
+            "end_next": 99
+        },
+        {
+            "file": "report_011.json",
+            "start_next": 100,
+            "end_next": 109
+        },
+        {
+            "file": "report_012.json",
+            "start_next": 110,
+            "end_next": 119
+        },
+        {
+            "file": "report_013.json",
+            "start_next": 120,
+            "end_next": 129
+        },
+        {
+            "file": "report_014.json",
+            "start_next": 130,
+            "end_next": 139
+        },
+        {
+            "file": "report_015.json",
+            "start_next": 140,
+            "end_next": 149
+        },
+        {
+            "file": "report_016.json",
+            "start_next": 150,
+            "end_next": 155
+        }
+    ]
+}

@@ -1,0 +1,264 @@
+{
+    "structId": "1077936130",
+    "type": "Struct",
+    "value": [
+        {
+            "param_type": "StructList",
+            "value": {
+                "structId": "1077936129",
+                "value": [
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "那一双如晨星般的眼睛倒映着石板的蓝光。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "101"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "而在石板的表面，那一缕微小无形的风之精灵，正用它那青色温暖的身体，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "102"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "一遍又一遍地摩挲着石板上流转的星光。那一瞬间，我甚至能通过石板，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "103"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "感受到一种温热、柔软、宛如猫咪爪垫般的细腻触感。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "104"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“是的，年轻的古恩希尔德。”我轻声微笑着，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "105"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "语气里充满了无法言喻的敬意与温柔，“我在三千年后的蒙德，注视着你们。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "106"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "在我的时代，暴风雪早已平息，高塔也已化为尘土。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "107"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "在未来，你们的后代，将生生世世践行‘永护蒙德’的誓言，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "108"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "守护这片自由的乐土。”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "109"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“女祭司……为神明戴上桂冠？”少女喃喃自语，她的眼眶渐渐红了。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "110"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

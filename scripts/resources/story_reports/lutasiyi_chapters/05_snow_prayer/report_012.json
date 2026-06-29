@@ -1,0 +1,264 @@
+{
+    "structId": "1077936130",
+    "type": "Struct",
+    "value": [
+        {
+            "param_type": "StructList",
+            "value": {
+                "structId": "1077936129",
+                "value": [
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "她伸出冻得有些皲裂的手，颤抖着轻触石板的边缘，“你说的，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "111"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "是真的吗？我们……我们真的活下来了？在这片看不到尽头的风雪中，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "112"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "57"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "我们的后裔，真的找到了那片可以自由歌唱的乐土吗？”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "113"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "7"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "10010"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“是真的。我向你保证。”我一字一句，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "115"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "坚定地回答她，“而且，不仅是你们。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "116"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "还有你眼前的这缕微风，这只微小的风之精灵——它在未来的名字，叫做巴巴托斯。”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "117"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "8"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "10044"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "53"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "风之精灵在听到这个名字时，像是心有所感一般，在石板上欢快地转了个圈，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "119"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "53"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "发出一声极其清脆、空灵的短哨声。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "120"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

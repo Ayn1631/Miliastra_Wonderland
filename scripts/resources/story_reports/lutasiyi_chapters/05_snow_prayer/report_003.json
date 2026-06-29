@@ -1,0 +1,264 @@
+{
+    "structId": "1077936130",
+    "type": "Struct",
+    "value": [
+        {
+            "param_type": "StructList",
+            "value": {
+                "structId": "1077936129",
+                "value": [
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "我立刻翻开手边厚重的历史断卷，脑海中疯狂地检索着那个著名的、却在后世记载中极其模糊的时间节点。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "21"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "这正是古恩希尔德家族因为不满高塔孤王的统治，而选择逃离牢笼、在城外几乎被漫天暴风雪彻底灭族的至暗时刻！"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "22"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“相信我，卢卡！在我的时代，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "23"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "有一部关于‘古恩希尔德家族’的族谱。里面记载着，在这个年份，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "24"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "他们因为不满高塔孤王的统治，而选择逃离牢笼。此时此刻，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "25"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "他们就在北方的暴风雪里，已经濒临绝境!”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "26"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "我迅速在脑中演算着星象与古蒙德地理的重合位置："
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "27"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“听着，卢卡！你们必须往正北方向前进。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "28"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "在距离城墙约两千步的地方，有一处红色的砂岩断崖。如果他们还活着，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "29"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "一定会聚集在断崖下方，靠着最后的柴火支撑。快去！”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "30"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

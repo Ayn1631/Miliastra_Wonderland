@@ -1,0 +1,1663 @@
+{
+  "format": "gil_component_workflow_spec",
+  "version": 1,
+  "input_gil": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\gil_inputs\\塔露斯伊.gil",
+  "template_gil": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\gil_templates\\Template.gil",
+  "template_component": "Template",
+  "structs_json": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\gil_inputs\\塔露斯伊.structs.json",
+  "output_gil": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\gil_outputs\\塔露斯伊_章节元件.gil",
+  "overwrite": true,
+  "id_policy": {
+    "component_definition_start": 1077940000,
+    "component_index_start": 1077950000,
+    "value_ref_start": 1075000000
+  },
+  "source": {
+    "chapters_root": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters",
+    "chapter_count": 1
+  },
+  "components": [
+    {
+      "name": "05_snow_prayer",
+      "chapter_dir": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer",
+      "chapter_title": "05_snow_prayer",
+      "section_count": 16,
+      "variables": [
+        {
+          "name": "小节",
+          "type": "str_list",
+          "value": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"
+          ]
+        },
+        {
+          "name": "1",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10022
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10003
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "第五章：雪原上的祈祷"
+                ],
+                "next": [
+                  3
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50026
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10003
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "当石板表面再次泛起熟悉的幽蓝色荧光时，传过来的声音里，已经没有了高塔内部沉闷的机械轰鸣，"
+                ],
+                "next": [
+                  6
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "取而代之的，是一种刺骨、狂乱、仿佛能将肉体和灵魂一并冻结的漫天风啸声。"
+                ],
+                "next": [
+                  7
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“长官……长官！你还在吗？”"
+                ],
+                "next": [
+                  8
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "卢卡的声音颤抖得极其厉害，还伴随着牙齿剧烈打颤的响动。"
+                ],
+                "next": [
+                  9
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "我立刻握紧了石板：“我在，卢卡。"
+                ],
+                "next": [
+                  10
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_001.json"
+        },
+        {
+          "name": "2",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "4",
+                "str": [
+                  "你听上去情况很糟，你现在在哪里？还在贫民窟的石屋里吗？”"
+                ],
+                "next": [
+                  11
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10003
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“不……我和几位伙伴，跟着城里一队运送废弃矿渣的杂役，偷偷溜出了王城外围的哨口。”"
+                ],
+                "next": [
+                  13
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "卢卡大口地喘着粗气，呼啸的风雪声在脑海里几乎要把他的声音淹没，“诗人留在贫民窟的石屋里，"
+                ],
+                "next": [
+                  14
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "他的身体单薄承受不住外面的风暴。但外面的雪也太大了……简直是疯了。神殿里的大人们说，"
+                ],
+                "next": [
+                  15
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "现在是‘风暴纪元三百四十年’，整片冰原都在被极寒冰暴覆盖。我们才走了不到一千步，"
+                ],
+                "next": [
+                  16
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "身上的斗篷就全被冻成了硬邦邦的冰甲，根本看不清前方的路……”"
+                ],
+                "next": [
+                  17
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10128
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "风暴纪元三百四十年。"
+                ],
+                "next": [
+                  19
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "我在温暖的西风骑士团档案室里，忍不住打了个冷颤。"
+                ],
+                "next": [
+                  20
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_002.json"
+        },
+        {
+          "name": "3",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "我立刻翻开手边厚重的历史断卷，脑海中疯狂地检索着那个著名的、却在后世记载中极其模糊的时间节点。"
+                ],
+                "next": [
+                  21
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "这正是古恩希尔德家族因为不满高塔孤王的统治，而选择逃离牢笼、在城外几乎被漫天暴风雪彻底灭族的至暗时刻！"
+                ],
+                "next": [
+                  22
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“相信我，卢卡！在我的时代，"
+                ],
+                "next": [
+                  23
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "有一部关于‘古恩希尔德家族’的族谱。里面记载着，在这个年份，"
+                ],
+                "next": [
+                  24
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "他们因为不满高塔孤王的统治，而选择逃离牢笼。此时此刻，"
+                ],
+                "next": [
+                  25
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "他们就在北方的暴风雪里，已经濒临绝境!”"
+                ],
+                "next": [
+                  26
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "我迅速在脑中演算着星象与古蒙德地理的重合位置："
+                ],
+                "next": [
+                  27
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“听着，卢卡！你们必须往正北方向前进。"
+                ],
+                "next": [
+                  28
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "在距离城墙约两千步的地方，有一处红色的砂岩断崖。如果他们还活着，"
+                ],
+                "next": [
+                  29
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "一定会聚集在断崖下方，靠着最后的柴火支撑。快去！”"
+                ],
+                "next": [
+                  30
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_003.json"
+        },
+        {
+          "name": "4",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "石板那头传来了卢卡极其简短、却极其坚决的回应："
+                ],
+                "next": [
+                  31
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10113
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“好……长官，我相信你。我这就带上几名相熟的年轻猎手，"
+                ],
+                "next": [
+                  33
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "往正北走！”"
+                ],
+                "next": [
+                  34
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10015
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "一个标准时后。"
+                ],
+                "next": [
+                  36
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10003
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "石板里的风雪声变得更加狂暴。但不知是否是因为地脉波动的共振，我面前的黑色石板忽然释放出一道前所未有的明亮光晕。"
+                ],
+                "next": [
+                  38
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50613
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "那一瞬间，我的意识仿佛穿透了冷冰冰的文字与千年的时空阻隔。我不再只是一个躲在暖炉旁、"
+                ],
+                "next": [
+                  40
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_004.json"
+        },
+        {
+          "name": "5",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "戴着耳机听取报告的旁观者。通过这块与地脉深层相连的石板，我的视野、"
+                ],
+                "next": [
+                  41
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "听觉，甚至对温度的感知，在这一刻与那个风雪交加的狂暴世界轰然接轨。"
+                ],
+                "next": [
+                  42
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50081
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "我“看”到了——"
+                ],
+                "next": [
+                  44
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10128
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "漫天白茫茫的混沌风雪中，矗立着一面巨大如城堡般的红色砂岩断崖。狂暴的冰晶打在岩壁上，"
+                ],
+                "next": [
+                  46
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "发出令人胆寒的碎裂声。"
+                ],
+                "next": [
+                  47
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "断崖之下，黑压压地挤着上百个流民。他们大多穿着极其简陋粗糙的粗麻衣服，"
+                ],
+                "next": [
+                  48
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "在刺骨的寒风中紧紧相拥。而在这群濒临死境的凡人最前方，站着一位少女。"
+                ],
+                "next": [
+                  49
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "她穿着一件边缘被风雪撕裂的皮甲，一头利落的金色长发在烈风中狂乱地飞舞。她的面容在极寒中被冻得发青，"
+                ],
+                "next": [
+                  50
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_005.json"
+        },
+        {
+          "name": "6",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "但那一双清澈如晨星的眼眸中，却没有丝毫的屈服。"
+                ],
+                "next": [
+                  51
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "她，正是古恩希尔德家族的族长女儿。"
+                ],
+                "next": [
+                  52
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "此时，她正高高举起一个粗糙的、刻满岁月痕迹的古旧石杯。"
+                ],
+                "next": [
+                  53
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "面对那仿佛要吞噬一切的极寒冰风，她用近乎沙哑却无比坚定的声音，领着身后的族人们高声呼喊："
+                ],
+                "next": [
+                  54
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“——风啊，请听一听凡人的悲歌。我们无意冒犯神明，"
+                ],
+                "next": [
+                  55
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "亦不求登临天之高座，我们只是想要活下去……想要在这片冰原上，为我们的孩子寻找一块没有狂暴风雪遮蔽的土地。”"
+                ],
+                "next": [
+                  56
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“如果漫天的风雪只有毁灭，那这天地生出微风的意义又在哪里？"
+                ],
+                "next": [
+                  57
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "请回应我们吧……哪怕只有一缕，温和的风……”"
+                ],
+                "next": [
+                  58
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "随着她的歌声，崖壁下所有冻僵的凡人都双手合十，将他们最后的求生执念，"
+                ],
+                "next": [
+                  59
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "汇聚在这风雪中的低吟中。"
+                ],
+                "next": [
+                  60
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_006.json"
+        },
+        {
+          "name": "7",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "那一瞬间，狂暴的暴风雪中，突然产生了一股极其奇异、"
+                ],
+                "next": [
+                  61
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "极其轻灵的律动。"
+                ],
+                "next": [
+                  62
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50613
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10084
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "一团极其微小、散发着淡青色荧光的风元素气流，突兀地在虚空中凝聚。"
+                ],
+                "next": [
+                  65
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "它真的好小，甚至还没有诗人的木琴大，就像是一缕飘在半空、"
+                ],
+                "next": [
+                  66
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "摇摇欲坠的羽毛，怯生生地朝着断崖下方飘落。"
+                ],
+                "next": [
+                  67
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“它……它真的听到了。”"
+                ],
+                "next": [
+                  68
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "少女看着那一缕缓缓降落在她古旧石杯边缘的微小精灵，眼角猛地滑落一滴眼泪。"
+                ],
+                "next": [
+                  69
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "那微小的风之精灵仿佛具有灵性，它摇晃着没有固定形体的小小身躯，用近乎透明的风之羽翼，"
+                ],
+                "next": [
+                  70
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_007.json"
+        },
+        {
+          "name": "8",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "53",
+                "str": [
+                  "极其轻柔地蹭了蹭少女那沾着雪花的睫毛，拂去了上面的冰霜。"
+                ],
+                "next": [
+                  71
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“小家伙……是你回应了我们吗？”少女颤抖着伸出手指，让这缕散发着微弱暖意的风之精灵落在自己的指尖。"
+                ],
+                "next": [
+                  72
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10044
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "风之精灵发出一阵极其微弱、空灵的嗡鸣。那声音并不是人类的语言，"
+                ],
+                "next": [
+                  74
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "但在场的所有凡人，甚至包括通过石板共享感官的我，都在脑海中听到了一缕极其温柔的呢喃，"
+                ],
+                "next": [
+                  75
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "那是一个关于“自由与陪伴”的最初愿望。"
+                ],
+                "next": [
+                  76
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“不要害怕，小家伙……”少女微笑着，声音变得无比轻柔，"
+                ],
+                "next": [
+                  77
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“我们会守护你，只要你愿意留下来，与我们在一起。”"
+                ],
+                "next": [
+                  78
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“这……这就是神迹吗？”"
+                ],
+                "next": [
+                  79
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "这时，满身霜雪的卢卡终于带着年轻猎手们冲破了风雪，踉踉跄跄地踩着积雪赶到了断崖下。"
+                ],
+                "next": [
+                  80
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_008.json"
+        },
+        {
+          "name": "9",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "他震惊地看着那一人一精灵在风雪中依偎的画面，一时间甚至忘记了呼吸。"
+                ],
+                "next": [
+                  81
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "而在卢卡的怀里，那块黑色石板正散发着温暖、明亮的幽蓝色光芒，"
+                ],
+                "next": [
+                  82
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "将这寒冷的夜空照亮了一角。"
+                ],
+                "next": [
+                  83
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10073
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "风之精灵似乎被石板上的幽蓝光芒所吸引。它好奇地扇动着微弱的羽翼，从少女的指尖飞起，"
+                ],
+                "next": [
+                  85
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "摇摇晃晃地飘到了卢卡的身前，最后，极其温柔地停驻在了那块流动着璀璨星尘的黑色石板上。"
+                ],
+                "next": [
+                  86
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“呀……”"
+                ],
+                "next": [
+                  87
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "少女有些警惕地按住了腰间的猎刀，但当她看到卢卡怀里的石板散发着温和、毫无攻击性的蓝色荧光时，"
+                ],
+                "next": [
+                  88
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "神色微微一怔。"
+                ],
+                "next": [
+                  89
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“不要害怕，古恩希尔德的女儿。”"
+                ],
+                "next": [
+                  90
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_009.json"
+        },
+        {
+          "name": "10",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "我深深吸了一口档案室里带着古旧纸张气味的空气，闭上眼睛，将自己的声音，"
+                ],
+                "next": [
+                  91
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "通过这块正被风之精灵温柔触碰的石板，清晰地送到了三千年前的极寒雪原上。"
+                ],
+                "next": [
+                  92
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“谁？是谁在说话？！”少女惊愕地后退了一步，"
+                ],
+                "next": [
+                  93
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "不可置信地看着那块黑色的石板。不仅是她，崖壁下那些冻得奄奄一息的族人们，"
+                ],
+                "next": [
+                  94
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "也纷纷用敬畏、震惊的目光望向这边。"
+                ],
+                "next": [
+                  95
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“族长女儿，请不要戒备。”卢卡连忙上前一步，"
+                ],
+                "next": [
+                  96
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "双手将石板高高举起，神色无比虔诚，“这位是石板另一端的‘神秘长官’。"
+                ],
+                "next": [
+                  97
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "他来自极其遥远的未来……是他刚才告诉我你们的位置，指引我带人过来寻找你们的！”"
+                ],
+                "next": [
+                  98
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“未来的……长官？”"
+                ],
+                "next": [
+                  99
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "少女怔怔地看着石板。她走上前来，蹲在卢卡身前，"
+                ],
+                "next": [
+                  100
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_010.json"
+        },
+        {
+          "name": "11",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "那一双如晨星般的眼睛倒映着石板的蓝光。"
+                ],
+                "next": [
+                  101
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "而在石板的表面，那一缕微小无形的风之精灵，正用它那青色温暖的身体，"
+                ],
+                "next": [
+                  102
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "一遍又一遍地摩挲着石板上流转的星光。那一瞬间，我甚至能通过石板，"
+                ],
+                "next": [
+                  103
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "感受到一种温热、柔软、宛如猫咪爪垫般的细腻触感。"
+                ],
+                "next": [
+                  104
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“是的，年轻的古恩希尔德。”我轻声微笑着，"
+                ],
+                "next": [
+                  105
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "语气里充满了无法言喻的敬意与温柔，“我在三千年后的蒙德，注视着你们。"
+                ],
+                "next": [
+                  106
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "在我的时代，暴风雪早已平息，高塔也已化为尘土。"
+                ],
+                "next": [
+                  107
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "在未来，你们的后代，将生生世世践行‘永护蒙德’的誓言，"
+                ],
+                "next": [
+                  108
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "守护这片自由的乐土。”"
+                ],
+                "next": [
+                  109
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "“女祭司……为神明戴上桂冠？”少女喃喃自语，她的眼眶渐渐红了。"
+                ],
+                "next": [
+                  110
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_011.json"
+        },
+        {
+          "name": "12",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "57",
+                "str": [
+                  "她伸出冻得有些皲裂的手，颤抖着轻触石板的边缘，“你说的，"
+                ],
+                "next": [
+                  111
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "是真的吗？我们……我们真的活下来了？在这片看不到尽头的风雪中，"
+                ],
+                "next": [
+                  112
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "我们的后裔，真的找到了那片可以自由歌唱的乐土吗？”"
+                ],
+                "next": [
+                  113
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10010
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“是真的。我向你保证。”我一字一句，"
+                ],
+                "next": [
+                  115
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "坚定地回答她，“而且，不仅是你们。"
+                ],
+                "next": [
+                  116
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "还有你眼前的这缕微风，这只微小的风之精灵——它在未来的名字，叫做巴巴托斯。”"
+                ],
+                "next": [
+                  117
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10044
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "风之精灵在听到这个名字时，像是心有所感一般，在石板上欢快地转了个圈，"
+                ],
+                "next": [
+                  119
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "发出一声极其清脆、空灵的短哨声。"
+                ],
+                "next": [
+                  120
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_012.json"
+        },
+        {
+          "name": "13",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "57",
+                "str": [
+                  "“巴巴托斯……”少女重复着这个名字，她温柔地看着石板上的精灵，“原来，"
+                ],
+                "next": [
+                  121
+                ]
+              },
+              {
+                "status": "57",
+                "str": [
+                  "你叫巴巴托斯。你要做我们的风之神，对吗？”"
+                ],
+                "next": [
+                  122
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50613
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "风之精灵飞回到少女的肩头，亲昵地蹭着她的侧脸。一瞬间，"
+                ],
+                "next": [
+                  124
+                ]
+              },
+              {
+                "status": "53",
+                "str": [
+                  "一阵奇异的青色光芒以断崖为中心，如水波般轰然扩散开来！"
+                ],
+                "next": [
+                  125
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10060
+                ]
+              },
+              {
+                "status": "000",
+                "str": [
+                  "精灵的微光"
+                ],
+                "next": [
+                  127
+                ]
+              },
+              {
+                "status": "000",
+                "str": [
+                  "关闭插图"
+                ],
+                "next": [
+                  128
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "那不再是冰冷狂暴的神威风暴，而是一道由千万凡人纯粹信仰与风之精灵共同筑起的温暖结界。"
+                ],
+                "next": [
+                  129
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "所有的狂风暴雪在撞击到这层薄薄的青色荧光边缘时--"
+                ],
+                "next": [
+                  130
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_013.json"
+        },
+        {
+          "name": "14",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "都化作了温和、亮晶晶的温热雨露消散开来。"
+                ],
+                "next": [
+                  131
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“长官……你看到了吗？”卢卡在脑海中对我说，眼眶湿润，"
+                ],
+                "next": [
+                  132
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“风雪，被它挡住了。大家都活下来了……”"
+                ],
+                "next": [
+                  133
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“我看到了，卢卡。你们做得很好。”"
+                ],
+                "next": [
+                  134
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "我微笑着，泪水在眼眶里打转。"
+                ],
+                "next": [
+                  135
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50026
+                ]
+              },
+              {
+                "status": "7",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  10061
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "在我的桌上，那本空白古书《露塔斯伊》的第五页上，耀眼的金色线条开始疯狂地流淌，"
+                ],
+                "next": [
+                  138
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "勾勒出一幅跨越漫长时空的精美画面——"
+                ],
+                "next": [
+                  139
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "在极寒的红色砂岩断崖下，一个长发飘逸、面容英挺的族长女儿，"
+                ],
+                "next": [
+                  140
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_014.json"
+        },
+        {
+          "name": "15",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": [
+                  "正高高举起手中的石杯，率领着全体族人，向着那只在半空中起舞的微小青色精灵虔诚跪拜。"
+                ],
+                "next": [
+                  141
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "而在她的身侧，卢卡正高举着发光的石板，与那跨越了漫长岁月的见证者（我），"
+                ],
+                "next": [
+                  142
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "共同注视着这伟大神迹的诞生。"
+                ],
+                "next": [
+                  143
+                ]
+              },
+              {
+                "status": "8",
+                "str": [
+                  "0"
+                ],
+                "next": [
+                  50081
+                ]
+              },
+              {
+                "status": "6",
+                "str": [
+                  "在画面的最下方，是一行龙飞凤舞的古蒙德文字："
+                ],
+                "next": [
+                  145
+                ]
+              },
+              {
+                "status": "52",
+                "str": [
+                  "“在暴风雪最猛烈的冬夜，凡人的祈祷惊醒了沉睡的风。自由的微风，"
+                ],
+                "next": [
+                  146
+                ]
+              },
+              {
+                "status": "52",
+                "str": [
+                  "在冰原上筑起了温暖的归宿。”"
+                ],
+                "next": [
+                  147
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "“长官，这次成功的营救，对我们来说太重要了。”"
+                ],
+                "next": [
+                  148
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "卢卡有些激动地低声说，“古恩希尔德家族有一百多名最勇敢的战士。最重要的是，"
+                ],
+                "next": [
+                  149
+                ]
+              },
+              {
+                "status": "5",
+                "str": [
+                  "这件事已经传回了王城下层的贫民窟……大家都在说，原来在神殿外面，真的有神灵能回应我们的祈祷；"
+                ],
+                "next": [
+                  150
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_015.json"
+        },
+        {
+          "name": "16",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "5",
+                "str": [
+                  "原来不依靠孤王的烈风，我们也完全可以生存下去！”"
+                ],
+                "next": [
+                  151
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“是的，卢卡。去带他们回去吧。”"
+                ],
+                "next": [
+                  152
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "我闭上眼睛，感受着档案室里似乎正在随之悄然流转的塞西莉亚花香，轻声微笑，"
+                ],
+                "next": [
+                  153
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "“因为自由，才是生存最大的依靠。属于你们的战役，"
+                ],
+                "next": [
+                  154
+                ]
+              },
+              {
+                "status": "4",
+                "str": [
+                  "要正式开始了。”"
+                ],
+                "next": [
+                  155
+                ]
+              },
+              {
+                "status": "3",
+                "str": [
+                  "第五章完"
+                ],
+                "next": [
+                  -1
+                ]
+              }
+            ]
+          },
+          "source_report": "C:\\Users\\20753\\Desktop\\gia逆向\\scripts\\resources\\story_reports\\lutasiyi_chapters\\05_snow_prayer\\report_016.json"
+        }
+      ]
+    }
+  ]
+}

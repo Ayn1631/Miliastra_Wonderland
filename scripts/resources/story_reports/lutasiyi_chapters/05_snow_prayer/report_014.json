@@ -1,0 +1,264 @@
+{
+    "structId": "1077936130",
+    "type": "Struct",
+    "value": [
+        {
+            "param_type": "StructList",
+            "value": {
+                "structId": "1077936129",
+                "value": [
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "都化作了温和、亮晶晶的温热雨露消散开来。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "131"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "5"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“长官……你看到了吗？”卢卡在脑海中对我说，眼眶湿润，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "132"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "5"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“风雪，被它挡住了。大家都活下来了……”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "133"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "“我看到了，卢卡。你们做得很好。”"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "134"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "4"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "我微笑着，泪水在眼眶里打转。"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "135"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "8"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "50026"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "7"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "10061"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "在我的桌上，那本空白古书《露塔斯伊》的第五页上，耀眼的金色线条开始疯狂地流淌，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "138"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "勾勒出一幅跨越漫长时空的精美画面——"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "139"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "param_type": "Struct",
+                        "value": {
+                            "structId": "1077936129",
+                            "type": "Struct",
+                            "value": [
+                                {
+                                    "param_type": "String",
+                                    "value": "6"
+                                },
+                                {
+                                    "param_type": "StringList",
+                                    "value": [
+                                        "在极寒的红色砂岩断崖下，一个长发飘逸、面容英挺的族长女儿，"
+                                    ]
+                                },
+                                {
+                                    "param_type": "Int32List",
+                                    "value": [
+                                        "140"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

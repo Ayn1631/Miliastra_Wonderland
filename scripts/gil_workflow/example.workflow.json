@@ -1,0 +1,87 @@
+{
+  "format": "gil_component_workflow_spec",
+  "version": 1,
+  "input_gil": "../resources/gil_templates/Template.gil",
+  "template_gil": "../resources/gil_templates/Template.gil",
+  "template_component": "Template",
+  "structs_json": "../resources/gil_templates/Template.structs.json",
+  "output_gil": "../resources/gil_outputs/Template_工作流生成示例.gil",
+  "overwrite": true,
+  "id_policy": {
+    "component_definition_start": 1077936200,
+    "component_index_start": 1077936300,
+    "value_ref_start": 1073742200
+  },
+  "components": [
+    {
+      "name": "Generated_A",
+      "variables": [
+        {
+          "name": "title",
+          "type": "str",
+          "value": "第一个生成元件"
+        },
+        {
+          "name": "level",
+          "type": "int",
+          "value": 3
+        },
+        {
+          "name": "enabled",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "tags",
+          "type": "str_list",
+          "value": ["demo", "generated"]
+        },
+        {
+          "name": "profile",
+          "type": "struct",
+          "struct": "test",
+          "value": {
+            "str": "结构体里的字符串",
+            "str_list": ["a", "b"],
+            "int": 1,
+            "int_list": [1, 2],
+            "float": 1.5,
+            "float_list": [1.5, 2.5],
+            "bool": true,
+            "bool_list": [true, false],
+            "vector": {},
+            "vector_list": [],
+            "object": null,
+            "object_lsit": [],
+            "GUID": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Generated_B",
+      "variables": [
+        {
+          "name": "name",
+          "type": "str",
+          "value": "第二个生成元件"
+        },
+        {
+          "name": "weights",
+          "type": "float_list",
+          "value": [0.25, 0.5, 1.0]
+        },
+        {
+          "name": "settings",
+          "type": "dict",
+          "key_type": "str",
+          "value_type": "int",
+          "entries": [
+            {"key": "hp", "value": 100},
+            {"key": "mp", "value": 50}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# Ignore everything by default.
+*
+
+# Keep repository metadata and docs.
+!.gitignore
+!README.md
+
+# Keep all script tooling and its internal resources.
+!scripts/
+!scripts/**

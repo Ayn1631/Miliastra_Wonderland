@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LifeLine Story Board</title>
+  <link rel="stylesheet" href="story_board.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>LifeLine Story Board</strong>
+      <span>节点文本和分支文本分离，导出时兼容 state|str|next</span>
+    </div>
+    <div class="actions">
+      <label class="button">
+        导入故事
+        <input id="storyFile" class="hidden" type="file" accept=".txt,text/plain">
+      </label>
+      <button id="exportStory" class="button primary" type="button">导出故事</button>
+      <button id="exportLayout" class="button" type="button">导出布局TXT</button>
+      <label class="button">
+        导入布局TXT
+        <input id="layoutFile" class="hidden" type="file" accept=".txt,text/plain">
+      </label>
+      <button id="autoLayout" class="button" type="button">自动布局</button>
+    </div>
+  </header>
+
+  <main class="app">
+    <aside class="panel left-panel">
+      <section>
+        <h2>概览</h2>
+        <div class="stats">
+          <div><b id="nodeCount">0</b><span>节点</span></div>
+          <div><b id="edgeCount">0</b><span>通路</span></div>
+          <div><b id="branchCount">0</b><span>分支</span></div>
+          <div><b id="issueCount">0</b><span>问题</span></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>工具</h2>
+        <div class="tool-grid">
+          <button id="addStoryNode" class="button" type="button">新增剧情节点</button>
+          <button id="addEndNode" class="button" type="button">新增结局节点</button>
+          <button id="groupSelect" class="button" type="button">框选分组</button>
+          <button id="collapseGroup" class="button" type="button">折叠分组</button>
+          <button id="expandGroup" class="button" type="button">展开分组</button>
+          <button id="ungroup" class="button" type="button">解散分组</button>
+          <button id="centerSelected" class="button" type="button">定位选中</button>
+          <button id="resetView" class="button" type="button">重置视图</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>校验</h2>
+        <div id="issues" class="list empty">暂无问题</div>
+      </section>
+
+      <section>
+        <h2>源码预览</h2>
+        <textarea id="sourcePreview" class="source-preview" spellcheck="false"></textarea>
+        <button id="applySource" class="button full" type="button">从源码重建图</button>
+      </section>
+    </aside>
+
+    <section class="stage">
+      <div class="stagebar">
+        <div class="hint">拖动画布或滚轮平移。Ctrl/Alt+滚轮缩放。拖圆点连线，结局节点也可连接下一节点。拖边线重连，松到空白删除。</div>
+        <input id="search" class="search" type="search" placeholder="搜索节点或分支">
+      </div>
+      <div id="canvas" class="canvas">
+        <div id="world" class="world">
+          <svg id="edgesSvg" class="edges-svg" aria-label="故事通路"></svg>
+          <div id="nodesLayer" class="nodes-layer"></div>
+          <svg id="dragSvg" class="drag-svg" aria-hidden="true"></svg>
+          <div id="selectionBox" class="selection-box hidden"></div>
+        </div>
+        <div id="minimap" class="minimap" title="点击或拖动快速移动视野">
+          <div class="minimap-title">鸟瞰图</div>
+          <div id="minimapNodes" class="minimap-nodes"></div>
+          <div id="minimapViewport" class="minimap-viewport"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel right-panel">
+      <section>
+        <h2>节点</h2>
+        <div class="field">
+          <label for="nodeId">编号</label>
+          <input id="nodeId" type="text" disabled>
+        </div>
+        <div class="field">
+          <label for="nodeKind">类型</label>
+          <select id="nodeKind">
+            <option value="story">剧情</option>
+            <option value="end">结局</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="nodeRole">角色</label>
+          <select id="nodeRole">
+            <option value="story">普通故事</option>
+            <option value="narrator">旁白</option>
+            <option value="protagonist">主角</option>
+            <option value="other">对方</option>
+            <option value="func">(func)</option>
+            <option value="bgm">BGM切换</option>
+            <option value="sfx">音效触发</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="nodeText">节点文本</label>
+          <textarea id="nodeText" spellcheck="false"></textarea>
+        </div>
+        <div class="row-actions">
+          <button id="saveNode" class="button primary" type="button">保存节点</button>
+          <button id="deleteNode" class="button danger" type="button">删除节点</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>人物映射</h2>
+        <div id="characterMap" class="character-map"></div>
+      </section>
+
+      <section>
+        <h2>输出通路</h2>
+        <div id="edgeEditor" class="edge-editor empty">选中节点后显示通路</div>
+      </section>
+
+      <section>
+        <h2>选中通路</h2>
+        <div class="field">
+          <label for="edgeLabel">分支文本</label>
+          <input id="edgeLabel" type="text">
+        </div>
+        <div class="row-actions">
+          <button id="saveEdge" class="button primary" type="button">保存通路</button>
+          <button id="deleteEdge" class="button danger" type="button">删除通路</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="story_board.js"></script>
+</body>
+</html>

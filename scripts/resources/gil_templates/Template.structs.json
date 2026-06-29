@@ -1,0 +1,361 @@
+{
+  "file": "scripts\\resources\\gil_templates\\Template.gil",
+  "size": 43139,
+  "struct_count": 2,
+  "structs": [
+    {
+      "id": 1077936129,
+      "name": "test",
+      "field_count": 13,
+      "fields": [
+        {
+          "index": 1,
+          "name": "str",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str_list",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "int",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 4,
+          "name": "int_list",
+          "type_code": 8,
+          "type": "int_list"
+        },
+        {
+          "index": 5,
+          "name": "float",
+          "type_code": 5,
+          "type": "float"
+        },
+        {
+          "index": 6,
+          "name": "float_list",
+          "type_code": 10,
+          "type": "float_list"
+        },
+        {
+          "index": 7,
+          "name": "bool",
+          "type_code": 4,
+          "type": "bool"
+        },
+        {
+          "index": 8,
+          "name": "bool_list",
+          "type_code": 9,
+          "type": "bool_list"
+        },
+        {
+          "index": 9,
+          "name": "vector",
+          "type_code": 12,
+          "type": "vector"
+        },
+        {
+          "index": 10,
+          "name": "vector_list",
+          "type_code": 15,
+          "type": "vector_list"
+        },
+        {
+          "index": 11,
+          "name": "object",
+          "type_code": 1,
+          "type": "object"
+        },
+        {
+          "index": 12,
+          "name": "object_lsit",
+          "type_code": 13,
+          "type": "object_list"
+        },
+        {
+          "index": 13,
+          "name": "GUID",
+          "type_code": 2,
+          "type": "GUID"
+        }
+      ],
+      "schema_offset": 31418,
+      "schema_length": 1228
+    },
+    {
+      "id": 1077936130,
+      "name": "test_1",
+      "field_count": 13,
+      "fields": [
+        {
+          "index": 1,
+          "name": "str",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str_list",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "int",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 4,
+          "name": "int_list",
+          "type_code": 8,
+          "type": "int_list"
+        },
+        {
+          "index": 5,
+          "name": "float",
+          "type_code": 5,
+          "type": "float"
+        },
+        {
+          "index": 6,
+          "name": "float_list",
+          "type_code": 10,
+          "type": "float_list"
+        },
+        {
+          "index": 7,
+          "name": "bool",
+          "type_code": 4,
+          "type": "bool"
+        },
+        {
+          "index": 8,
+          "name": "bool_list",
+          "type_code": 9,
+          "type": "bool_list"
+        },
+        {
+          "index": 9,
+          "name": "vector",
+          "type_code": 12,
+          "type": "vector"
+        },
+        {
+          "index": 10,
+          "name": "vector_list",
+          "type_code": 15,
+          "type": "vector_list"
+        },
+        {
+          "index": 11,
+          "name": "object",
+          "type_code": 1,
+          "type": "object"
+        },
+        {
+          "index": 12,
+          "name": "object_lsit",
+          "type_code": 13,
+          "type": "object_list"
+        },
+        {
+          "index": 13,
+          "name": "GUID",
+          "type_code": 2,
+          "type": "GUID"
+        }
+      ],
+      "schema_offset": 32649,
+      "schema_length": 1232
+    }
+  ],
+  "structs_by_name": {
+    "test": 1077936129,
+    "test_1": 1077936130
+  },
+  "structs_by_id": {
+    "1077936129": {
+      "id": 1077936129,
+      "name": "test",
+      "field_count": 13,
+      "fields": [
+        {
+          "index": 1,
+          "name": "str",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str_list",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "int",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 4,
+          "name": "int_list",
+          "type_code": 8,
+          "type": "int_list"
+        },
+        {
+          "index": 5,
+          "name": "float",
+          "type_code": 5,
+          "type": "float"
+        },
+        {
+          "index": 6,
+          "name": "float_list",
+          "type_code": 10,
+          "type": "float_list"
+        },
+        {
+          "index": 7,
+          "name": "bool",
+          "type_code": 4,
+          "type": "bool"
+        },
+        {
+          "index": 8,
+          "name": "bool_list",
+          "type_code": 9,
+          "type": "bool_list"
+        },
+        {
+          "index": 9,
+          "name": "vector",
+          "type_code": 12,
+          "type": "vector"
+        },
+        {
+          "index": 10,
+          "name": "vector_list",
+          "type_code": 15,
+          "type": "vector_list"
+        },
+        {
+          "index": 11,
+          "name": "object",
+          "type_code": 1,
+          "type": "object"
+        },
+        {
+          "index": 12,
+          "name": "object_lsit",
+          "type_code": 13,
+          "type": "object_list"
+        },
+        {
+          "index": 13,
+          "name": "GUID",
+          "type_code": 2,
+          "type": "GUID"
+        }
+      ],
+      "schema_offset": 31418,
+      "schema_length": 1228
+    },
+    "1077936130": {
+      "id": 1077936130,
+      "name": "test_1",
+      "field_count": 13,
+      "fields": [
+        {
+          "index": 1,
+          "name": "str",
+          "type_code": 6,
+          "type": "str"
+        },
+        {
+          "index": 2,
+          "name": "str_list",
+          "type_code": 11,
+          "type": "str_list"
+        },
+        {
+          "index": 3,
+          "name": "int",
+          "type_code": 3,
+          "type": "int"
+        },
+        {
+          "index": 4,
+          "name": "int_list",
+          "type_code": 8,
+          "type": "int_list"
+        },
+        {
+          "index": 5,
+          "name": "float",
+          "type_code": 5,
+          "type": "float"
+        },
+        {
+          "index": 6,
+          "name": "float_list",
+          "type_code": 10,
+          "type": "float_list"
+        },
+        {
+          "index": 7,
+          "name": "bool",
+          "type_code": 4,
+          "type": "bool"
+        },
+        {
+          "index": 8,
+          "name": "bool_list",
+          "type_code": 9,
+          "type": "bool_list"
+        },
+        {
+          "index": 9,
+          "name": "vector",
+          "type_code": 12,
+          "type": "vector"
+        },
+        {
+          "index": 10,
+          "name": "vector_list",
+          "type_code": 15,
+          "type": "vector_list"
+        },
+        {
+          "index": 11,
+          "name": "object",
+          "type_code": 1,
+          "type": "object"
+        },
+        {
+          "index": 12,
+          "name": "object_lsit",
+          "type_code": 13,
+          "type": "object_list"
+        },
+        {
+          "index": 13,
+          "name": "GUID",
+          "type_code": 2,
+          "type": "GUID"
+        }
+      ],
+      "schema_offset": 32649,
+      "schema_length": 1232
+    }
+  }
+}

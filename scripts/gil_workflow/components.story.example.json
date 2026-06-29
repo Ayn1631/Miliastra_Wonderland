@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "name": "DemoStoryComponent",
+      "variables": [
+        {
+          "name": "小节",
+          "type": "str_list",
+          "value": ["1"]
+        },
+        {
+          "name": "1",
+          "type": "struct",
+          "struct": "Story",
+          "value": {
+            "__struct_types__": {
+              "Story_List": "StoryNode"
+            },
+            "Story_List": [
+              {
+                "status": "6",
+                "str": ["示例剧情文本"],
+                "next": [2]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
