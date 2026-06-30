@@ -23,6 +23,7 @@ DEFAULT_TEMPLATE_GIL = RESOURCES_DIR / "gil_templates" / "Template.gil"
 DEFAULT_TEMPLATE_GIA = RESOURCES_DIR / "gil_templates" / "Template.gia"
 COMPONENTS_EXAMPLE_JSON = GIL_WORKFLOW_DIR / "components.example.json"
 COMPONENTS_JSON_GUIDE = GIL_WORKFLOW_DIR / "COMPONENTS_JSON_GUIDE.md"
+STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v2"
 STORY_PAGE_CSS = """
 <style>
 html,
@@ -412,7 +413,7 @@ def decode_text_bytes(raw: bytes) -> str:
 
 
 @st.cache_data(show_spinner=False)
-def parse_structs_upload_cached(file_name: str, raw: bytes) -> dict[str, Any]:
+def parse_structs_upload_cached(file_name: str, raw: bytes, parser_version: str) -> dict[str, Any]:
     suffix = Path(file_name).suffix.lower()
     if suffix == ".json":
         return normalize_structs_doc(
@@ -424,7 +425,9 @@ def parse_structs_upload_cached(file_name: str, raw: bytes) -> dict[str, Any]:
             source_path = Path(tmp) / file_name
             source_path.parent.mkdir(parents=True, exist_ok=True)
             source_path.write_bytes(raw)
-            return extract_structs_by_uploaded_format(source_path)
+            result = extract_structs_by_uploaded_format(source_path)
+            result["parser_cache_version"] = parser_version
+            return result
     raise ValueError("只支持 .json、.gia 或 .gil。")
 
 
@@ -822,7 +825,7 @@ def extract_structs_from_gia_schema(gia_path: Path) -> dict[str, Any]:
         "file": str(gia_path),
         "size": len(data),
         "source_format": "gia",
-        "extraction_mode": "gia_schema_records",
+        "extraction_mode": "gia_schema_records_with_inline_layout",
         "struct_count": len(structs),
         "structs": structs,
         "structs_by_name": {item["name"]: item["id"] for item in structs},
@@ -1720,7 +1723,7 @@ def page_extract_structs() -> None:
         suffix = Path(uploaded.name).suffix.lower()
         try:
             with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
-                result = parse_structs_upload_cached(uploaded.name, uploaded.getvalue())
+                result = parse_structs_upload_cached(uploaded.name, uploaded.getvalue(), STRUCT_PARSER_CACHE_VERSION)
         except Exception as exc:
             st.exception(exc)
             return
@@ -1812,7 +1815,7 @@ def page_import_variables() -> None:
         try:
             suffix = Path(structs_upload.name).suffix.lower()
             with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
-                structs_doc = parse_structs_upload_cached(structs_upload.name, structs_upload.getvalue())
+                structs_doc = parse_structs_upload_cached(structs_upload.name, structs_upload.getvalue(), STRUCT_PARSER_CACHE_VERSION)
             struct_count = int(structs_doc.get("struct_count") or len(structs_doc.get("structs", [])))
             source_format = structs_doc.get("source_format") or suffix.lstrip(".")
             extraction_mode = structs_doc.get("extraction_mode") or "structs_json"
