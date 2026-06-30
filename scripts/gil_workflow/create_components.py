@@ -17,6 +17,7 @@ from gil_common import (
     find_record_containing,
     find_variable_list_field,
     first_field,
+    key,
     length_field,
     load_gil,
     mark_dirty,
@@ -135,7 +136,7 @@ def encode_scalar_slot(type_code: int, value: Any, ctx: BuildContext) -> bytes:
         return repeated_varint_payload(list(value or []))
     if type_code == 5:
         number = float(value or 0.0)
-        return b"" if number == 0.0 else struct.pack("<f", number)
+        return b"" if number == 0.0 else key(1, 5) + struct.pack("<f", number)
     if type_code == 10:
         return repeated_float_payload(list(value or []))
     if type_code == 4:
