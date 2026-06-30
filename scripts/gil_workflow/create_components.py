@@ -121,8 +121,63 @@ def optional_struct_id(ctx: BuildContext, spec: dict[str, Any]) -> int | None:
     return resolve_struct_id(ctx, {"struct": struct_ref})
 
 
+def normalize_dict_spec(spec: dict[str, Any], value: Any) -> dict[str, Any]:
+    dict_spec = dict(spec)
+    if isinstance(value, dict):
+        for key_name in (
+            "key_type",
+            "key_type_code",
+            "value_type",
+            "value_type_code",
+            "value_struct_id",
+            "value_structId",
+            "dict_value_struct_id",
+            "struct",
+            "struct_id",
+            "entries",
+        ):
+            if key_name in value:
+                dict_spec[key_name] = value[key_name]
+    return dict_spec
+
+
+def protobuf_dict_type_ref(key_code: int, value_code: int) -> bytes:
+    return varint_field(1, 27) + length_field(
+        2,
+        varint_field(2, 66) + varint_field(502, key_code) + varint_field(503, value_code),
+    )
+
+
 def struct_def_by_id(ctx: BuildContext, struct_id: int) -> dict[str, Any] | None:
     return ctx.structs.get("structs_by_id", {}).get(str(struct_id))
+
+
+def vector_components(value: Any) -> tuple[float, float, float]:
+    if isinstance(value, dict):
+        return (
+            float(value.get("x") or value.get("X") or 0.0),
+            float(value.get("y") or value.get("Y") or 0.0),
+            float(value.get("z") or value.get("Z") or 0.0),
+        )
+    if isinstance(value, (list, tuple)):
+        values = list(value)[:3]
+        values += [0.0] * (3 - len(values))
+        return (float(values[0] or 0.0), float(values[1] or 0.0), float(values[2] or 0.0))
+    return (0.0, 0.0, 0.0)
+
+
+def vector_payload(value: Any) -> bytes:
+    x, y, z = vector_components(value)
+    if x == 0.0 and y == 0.0 and z == 0.0:
+        return b""
+    return (
+        key(1, 5)
+        + struct.pack("<f", x)
+        + key(2, 5)
+        + struct.pack("<f", y)
+        + key(3, 5)
+        + struct.pack("<f", z)
+    )
 
 
 def encode_scalar_slot(type_code: int, value: Any, ctx: BuildContext) -> bytes:
@@ -147,12 +202,17 @@ def encode_scalar_slot(type_code: int, value: Any, ctx: BuildContext) -> bytes:
         return b"" if int(value or 0) == 0 else varint_field(1, int(value))
     if type_code == 24:
         return repeated_varint_payload(list(value or []))
+    if type_code == 12:
+        return length_field(1, vector_payload(value))
+    if type_code == 15:
+        items = value if isinstance(value, list) else []
+        return b"".join(length_field(1, vector_payload(item)) for item in items)
     if type_code in (2, 7, 12, 13, 15, 20, 21, 22, 23, 1):
         if value not in (None, "", [], {}):
             ctx.warn(
                 f"type {TYPE_INFO[type_code]['name']} non-default value encoding is not fully confirmed; template default was used"
             )
-        if type_code in (12, 15, 20, 21, 22, 23):
+        if type_code in (20, 21, 22, 23):
             return length_field(1, b"")
         if type_code in (7, 13):
             return repeated_varint_payload([0])
@@ -174,7 +234,14 @@ def encode_value_message(
     if type_code in (25, 26):
         effective_struct_id = resolve_struct_id(ctx, spec) if effective_struct_id is None else effective_struct_id
 
-    result = varint_field(1, type_code) + length_field(2, protobuf_type_ref(type_code, effective_struct_id))
+    if type_code == 27:
+        dict_spec = normalize_dict_spec(spec, value)
+        key_code = type_code_from_name_or_code(dict_spec, "key_type", "key_type_code", default=6)
+        value_code = type_code_from_name_or_code(dict_spec, "value_type", "value_type_code", default=6)
+        type_ref = protobuf_dict_type_ref(key_code, value_code)
+    else:
+        type_ref = protobuf_type_ref(type_code, effective_struct_id)
+    result = varint_field(1, type_code) + length_field(2, type_ref)
 
     if type_code == 25:
         if not isinstance(value, dict):
@@ -249,21 +316,7 @@ def encode_struct_payload(ctx: BuildContext, struct_id: int, values: dict[str, A
 
 
 def encode_dict_payload(spec: dict[str, Any], value: Any, ctx: BuildContext) -> bytes:
-    dict_spec = dict(spec)
-    if isinstance(value, dict):
-        for key_name in (
-            "key_type",
-            "key_type_code",
-            "value_type",
-            "value_type_code",
-            "value_struct_id",
-            "value_structId",
-            "dict_value_struct_id",
-            "struct",
-            "struct_id",
-        ):
-            if key_name in value:
-                dict_spec[key_name] = value[key_name]
+    dict_spec = normalize_dict_spec(spec, value)
     key_code = type_code_from_name_or_code(dict_spec, "key_type", "key_type_code", default=6)
     value_code = type_code_from_name_or_code(dict_spec, "value_type", "value_type_code", default=6)
     value_struct_id = optional_struct_id(ctx, dict_spec) if value_code in (25, 26) else None
@@ -377,6 +430,12 @@ def build_variable(variable_spec: dict[str, Any], templates: dict[str, Any], ctx
     value_field["_raw_override"] = encode_value_message(type_code, value, ctx, variable_spec=variable_spec)
     if type_ref_field is not None and type_code in (25, 26):
         type_ref_field["_raw_override"] = protobuf_type_ref(type_code, resolve_struct_id(ctx, variable_spec))
+        mark_dirty(type_ref_field)
+    elif type_ref_field is not None and type_code == 27:
+        dict_spec = normalize_dict_spec(variable_spec, value)
+        key_code = type_code_from_name_or_code(dict_spec, "key_type", "key_type_code", default=6)
+        value_code = type_code_from_name_or_code(dict_spec, "value_type", "value_type_code", default=6)
+        type_ref_field["_raw_override"] = protobuf_dict_type_ref(key_code, value_code)
         mark_dirty(type_ref_field)
     elif type_ref_field is not None and type_code != 27:
         type_ref_field["_raw_override"] = protobuf_type_ref(type_code)
