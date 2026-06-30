@@ -23,7 +23,7 @@ DEFAULT_TEMPLATE_GIL = RESOURCES_DIR / "gil_templates" / "Template.gil"
 DEFAULT_TEMPLATE_GIA = RESOURCES_DIR / "gil_templates" / "Template.gia"
 COMPONENTS_EXAMPLE_JSON = GIL_WORKFLOW_DIR / "components.example.json"
 COMPONENTS_JSON_GUIDE = GIL_WORKFLOW_DIR / "COMPONENTS_JSON_GUIDE.md"
-STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v3-no-inferred"
+STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v4-order-sample"
 STORY_PAGE_CSS = """
 <style>
 html,
@@ -1039,6 +1039,87 @@ def data_json_to_struct_value(
     return value
 
 
+def struct_order_is_extracted(struct_doc: dict[str, Any], structs_doc: dict[str, Any]) -> bool:
+    if structs_doc.get("source_format") != "gia":
+        return True
+    return struct_doc.get("layout_source") == "gia_inline_layout"
+
+
+def param_at(data_json: dict[str, Any] | None, index: int) -> dict[str, Any] | None:
+    params = data_json.get("value") if isinstance(data_json, dict) else None
+    if not isinstance(params, list) or index >= len(params):
+        return None
+    param = params[index]
+    return param if isinstance(param, dict) else None
+
+
+def collect_unverified_order_structs(
+    struct_doc: dict[str, Any],
+    structs_doc: dict[str, Any],
+    data_json: dict[str, Any] | None = None,
+    *,
+    path: str = "",
+    seen: set[str] | None = None,
+) -> list[str]:
+    seen = seen or set()
+    struct_key = struct_id_text(struct_doc)
+    if struct_key in seen:
+        return []
+    seen.add(struct_key)
+
+    current_path = path or str(struct_doc.get("name") or struct_doc.get("id"))
+    problems: list[str] = []
+
+    if not struct_order_is_extracted(struct_doc, structs_doc):
+        if data_json is None:
+            problems.append(f"{current_path}：没有在 GIA 中提取到变量实际顺序，需要上传导出变量 JSON 校验。")
+        else:
+            try:
+                data_json_to_struct_value(struct_doc, structs_doc, data_json)
+            except Exception as exc:
+                problems.append(f"{current_path}：导出变量 JSON 与当前解析顺序不一致，{exc}")
+
+    fields = sorted(struct_doc.get("fields", []), key=lambda item: int(item.get("index", 0)))
+    for index, field in enumerate(fields):
+        type_code = int(field.get("type_code", 0))
+        field_name = str(field.get("name") or f"field_{index + 1}")
+        if type_code == 25:
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            nested_param = param_at(data_json, index)
+            nested_data = nested_param.get("value") if isinstance(nested_param, dict) else None
+            if nested_doc:
+                problems.extend(
+                    collect_unverified_order_structs(
+                        nested_doc,
+                        structs_doc,
+                        nested_data if isinstance(nested_data, dict) else None,
+                        path=f"{current_path}.{field_name}",
+                        seen=seen.copy(),
+                    )
+                )
+        elif type_code == 26:
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            nested_param = param_at(data_json, index)
+            nested_data = nested_param.get("value") if isinstance(nested_param, dict) else None
+            sample_items = nested_data.get("value") if isinstance(nested_data, dict) else None
+            first_item = sample_items[0] if isinstance(sample_items, list) and sample_items else None
+            first_item_data = first_item.get("value") if isinstance(first_item, dict) else None
+            if nested_doc:
+                if not struct_order_is_extracted(nested_doc, structs_doc) and data_json is not None and not isinstance(first_item_data, dict):
+                    problems.append(f"{current_path}.{field_name}：结构体列表没有样本项，无法校验元素结构体顺序。")
+                    continue
+                problems.extend(
+                    collect_unverified_order_structs(
+                        nested_doc,
+                        structs_doc,
+                        first_item_data if isinstance(first_item_data, dict) else None,
+                        path=f"{current_path}.{field_name}[]",
+                        seen=seen.copy(),
+                    )
+                )
+    return problems
+
+
 def find_gia_variable_list(component_record: dict[str, Any]) -> dict[str, Any]:
     data = gia_chapters.first_field(
         gia_chapters.children(gia_chapters.first_field(gia_chapters.children(component_record), 11)),
@@ -1791,7 +1872,7 @@ def page_import_variables() -> None:
         return
 
     data_upload = st.file_uploader(
-        "可选：上传已有数据结构 JSON（例如导出的对话.json）",
+        "上传导出变量 JSON（当 GIA 顺序不可信时必填，也可作为初始数据）",
         type=["json"],
         key="visual_struct_value_source",
     )
@@ -1830,6 +1911,21 @@ def page_import_variables() -> None:
     if not selected_struct_doc:
         st.error("未找到选中的结构体。")
         return
+
+    order_problems = collect_unverified_order_structs(selected_struct_doc, structs_doc, initial_data_json)
+    if order_problems:
+        if initial_data_json is None:
+            st.warning("当前 GIA 没有提取到完整可信的变量实际顺序，不能直接编辑或导出。")
+            st.info("请在上方上传“导出变量”得到的数据结构 JSON，用它逐位校验字段顺序。校验不通过时不会自动重排。")
+        else:
+            st.error("导出变量 JSON 不能证明当前字段顺序正确，已停止编辑，避免错位写入。")
+        for problem in order_problems[:8]:
+            st.write(f"- {problem}")
+        if len(order_problems) > 8:
+            st.write(f"- 还有 {len(order_problems) - 8} 个顺序问题未显示。")
+        return
+    if initial_data_json is not None and structs_doc.get("source_format") == "gia":
+        st.success("字段顺序已通过导出变量 JSON 逐位校验。")
 
     output_name = st.text_input("输出 JSON 文件名", value=f"{selected_struct}.json", key="visual_output_json_name")
 
