@@ -2064,8 +2064,6 @@ def page_import_variables() -> None:
     if initial_data_json is not None and structs_doc.get("source_format") == "gia":
         st.success("字段顺序已通过导出变量 JSON 逐位校验。")
 
-    output_name = st.text_input("输出 JSON 文件名", value=f"{selected_struct}.json", key="visual_output_json_name")
-
     with st.expander("结构体字段", expanded=False):
         st.dataframe(
             [
@@ -2089,12 +2087,20 @@ def page_import_variables() -> None:
     except Exception as exc:
         st.error(f"初始数据 JSON 与当前结构体顺序不一致：{exc}")
         return
+
     value = render_struct_value_editor(
         selected_struct_doc,
         structs_doc,
         f"visual_struct_editor_{selected_struct_doc.get('id')}_{initial_data_token}",
         initial_value=initial_value,
     )
+    output_name = st.text_input("输出 JSON 文件名", value=f"{selected_struct}.json", key="visual_output_json_name")
+    submitted = st.button("生成导出 JSON", type="primary", key="visual_generate_data_json")
+
+    if not submitted:
+        st.info("编辑完成后点击“生成导出 JSON”，再显示预览和下载按钮。")
+        return
+
     try:
         data_json = struct_value_to_data_json(selected_struct_doc, structs_doc, value)
         preview_json = json.dumps(data_json, ensure_ascii=False, indent=4) + "\n"
