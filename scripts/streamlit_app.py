@@ -1939,17 +1939,39 @@ def page_components_builder() -> None:
         else:
             st.warning(f"找不到帮助文档：{COMPONENTS_JSON_GUIDE}")
 
+    components_input_mode = st.radio(
+        "components JSON 输入方式",
+        ["上传文件", "直接输入"],
+        horizontal=True,
+        key="components_input_mode",
+    )
     with st.form("components_to_gil"):
         input_gil_upload = st.file_uploader("输入地图 .gil", type=["gil"], key="components_gil")
-        components_upload = st.file_uploader("components.example.json 同格式 JSON", type=["json"], key="components_json")
+        components_upload = None
+        components_text_input = ""
+        if components_input_mode == "上传文件":
+            components_upload = st.file_uploader("components.example.json 同格式 JSON", type=["json"], key="components_json")
+        else:
+            components_text_input = st.text_area(
+                "components.example.json 同格式 JSON 内容",
+                value=default_components_json_text(),
+                height=360,
+                key="components_json_text_input",
+            )
         # template_upload = st.file_uploader("Template.gil，可不传", type=["gil"], key="components_template")
         template_upload = None
         output_name = st.text_input("输出文件名", value="components_output.gil")
         submitted = st.form_submit_button("生成 GIL", type="primary")
 
     if submitted:
-        if not input_gil_upload or not components_upload:
-            st.error("需要上传地图 .gil 和 components JSON。")
+        if not input_gil_upload:
+            st.error("需要上传地图 .gil。")
+            return
+        if components_input_mode == "上传文件" and not components_upload:
+            st.error("需要上传 components JSON。")
+            return
+        if components_input_mode == "直接输入" and not components_text_input.strip():
+            st.error("需要输入 components JSON 内容。")
             return
         if not template_upload and not DEFAULT_TEMPLATE_GIL.exists():
             st.error(f"默认 Template.gil 不存在：{DEFAULT_TEMPLATE_GIL}")
@@ -1957,7 +1979,11 @@ def page_components_builder() -> None:
         with tempfile.TemporaryDirectory(prefix="qx_components_") as tmp:
             tmp_dir = Path(tmp)
             input_gil = write_upload(input_gil_upload, tmp_dir / "input.gil")
-            components_json = write_upload(components_upload, tmp_dir / "components.json")
+            components_json = tmp_dir / "components.json"
+            if components_input_mode == "上传文件":
+                components_json = write_upload(components_upload, components_json)
+            else:
+                components_json.write_text(components_text_input, encoding="utf-8")
             template_gil = (
                 write_upload(template_upload, tmp_dir / "Template.gil")
                 if template_upload
