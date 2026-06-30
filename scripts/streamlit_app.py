@@ -23,7 +23,7 @@ DEFAULT_TEMPLATE_GIL = RESOURCES_DIR / "gil_templates" / "Template.gil"
 DEFAULT_TEMPLATE_GIA = RESOURCES_DIR / "gil_templates" / "Template.gia"
 COMPONENTS_EXAMPLE_JSON = GIL_WORKFLOW_DIR / "components.example.json"
 COMPONENTS_JSON_GUIDE = GIL_WORKFLOW_DIR / "COMPONENTS_JSON_GUIDE.md"
-STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v2"
+STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v3-no-inferred"
 STORY_PAGE_CSS = """
 <style>
 html,
@@ -597,50 +597,6 @@ def append_variable_to_component(
     return components_doc
 
 
-def infer_story_structs_from_gia(gia_path: Path) -> dict[str, Any]:
-    data = gia_path.read_bytes()
-    if len(data) < gia_chapters.HEADER_SIZE + gia_chapters.FOOTER_SIZE:
-        raise ValueError("文件太小，不是有效的 GIA 容器。")
-
-    payload_len = int.from_bytes(data[16:20], "big")
-    payload_end = gia_chapters.HEADER_SIZE + payload_len
-    if payload_end + gia_chapters.FOOTER_SIZE != len(data):
-        raise ValueError("GIA payload 长度校验失败。")
-
-    story_node = {
-        "id": int(NODE_STRUCT_ID),
-        "name": "StoryNode",
-        "field_count": 3,
-        "fields": [
-            {"index": 1, "name": "status", "type_code": 6, "type": "str"},
-            {"index": 2, "name": "str", "type_code": 11, "type": "str_list"},
-            {"index": 3, "name": "next", "type_code": 8, "type": "int_list"},
-        ],
-        "source": "inferred_from_gia_story_variable",
-    }
-    story = {
-        "id": int(STRUCT_ID),
-        "name": "Story",
-        "field_count": 1,
-        "fields": [
-            {"index": 1, "name": "Story_List", "type_code": 26, "type": "struct_list"},
-        ],
-        "source": "inferred_from_gia_story_variable",
-    }
-    structs = [story_node, story]
-    return {
-        "file": str(gia_path),
-        "size": len(data),
-        "source_format": "gia",
-        "extraction_mode": "inferred_story_structs",
-        "note": "GIA 文件没有 GIL 的 root.f10 结构体定义区；这里根据 Story 元件变量格式推断 Story/StoryNode 结构体。",
-        "struct_count": len(structs),
-        "structs": structs,
-        "structs_by_name": {item["name"]: item["id"] for item in structs},
-        "structs_by_id": {str(item["id"]): item for item in structs},
-    }
-
-
 def nested_varint_value(message: dict[str, Any], path: list[int]) -> int | None:
     current = message
     for field_id in path[:-1]:
@@ -843,8 +799,12 @@ def extract_structs_by_uploaded_format(path: Path) -> dict[str, Any]:
     if suffix == ".gia":
         try:
             return extract_structs_from_gia_schema(path)
-        except ValueError:
-            return infer_story_structs_from_gia(path)
+        except ValueError as exc:
+            raise ValueError(
+                "没有在 GIA 中解析到可导出的高级数据结构定义，"
+                "因此不会展示 Story/StoryNode 等推断结构体。请上传包含结构体定义的 .gia/.gil，"
+                "或上传从真实结构体文件导出的 structs.json。"
+            ) from exc
     raise ValueError(f"不支持的文件格式：{path.suffix}。请上传 .gil 或 .gia。")
 
 
@@ -853,6 +813,8 @@ def normalize_structs_doc(data: Any, *, source_name: str = "") -> dict[str, Any]
         data = {"structs": data}
     if not isinstance(data, dict):
         raise ValueError("结构体数据顶层必须是对象，或直接是结构体数组。")
+    if data.get("extraction_mode") == "inferred_story_structs":
+        raise ValueError("这个 structs.json 是旧版推断结构体结果，不是真实高级数据结构定义。请重新上传含结构体定义的 GIA/GIL 导出。")
     structs = data.get("structs")
     if not isinstance(structs, list) or not structs:
         raise ValueError("结构体数据必须包含非空 structs 数组。")
