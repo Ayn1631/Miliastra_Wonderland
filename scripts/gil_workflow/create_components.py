@@ -70,22 +70,54 @@ def load_json(path: Path | None) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def resolve_struct_ref(ctx: BuildContext, struct_ref: Any) -> int:
+    if isinstance(struct_ref, int):
+        return struct_ref
+    text = str(struct_ref)
+    if text.isdigit():
+        return int(text)
+    structs_by_name = ctx.structs.get("structs_by_name", {})
+    if text in structs_by_name:
+        return int(structs_by_name[text])
+    raise ValueError(f"struct not found in extracted structs: {struct_ref}")
+
+
 def resolve_struct_id(ctx: BuildContext, spec: dict[str, Any]) -> int:
-    if "struct_id" in spec:
-        return int(spec["struct_id"])
+    for key_name in (
+        "structId",
+        "struct_id",
+        "elementStructId",
+        "element_struct_id",
+        "value_structId",
+        "value_struct_id",
+    ):
+        if key_name in spec:
+            return resolve_struct_ref(ctx, spec[key_name])
     if "struct" in spec:
-        struct_ref = spec["struct"]
-        if isinstance(struct_ref, int):
-            return struct_ref
-        structs_by_name = ctx.structs.get("structs_by_name", {})
-        if str(struct_ref) in structs_by_name:
-            return int(structs_by_name[str(struct_ref)])
-        raise ValueError(f"struct not found in extracted structs: {struct_ref}")
+        return resolve_struct_ref(ctx, spec["struct"])
     default_id = next(iter(ctx.structs.get("structs_by_name", {}).values()), None)
     if default_id is None:
         raise ValueError("struct variable requires struct/struct_id, and no extracted struct is available")
     ctx.warn(f"struct variable used first extracted struct id by default: {default_id}")
     return int(default_id)
+
+
+def optional_struct_id(ctx: BuildContext, spec: dict[str, Any]) -> int | None:
+    for key_name in (
+        "structId",
+        "struct_id",
+        "elementStructId",
+        "element_struct_id",
+        "value_structId",
+        "value_struct_id",
+        "dict_value_struct_id",
+    ):
+        if key_name in spec and spec[key_name] not in (None, ""):
+            return resolve_struct_ref(ctx, spec[key_name])
+    struct_ref = spec.get("struct")
+    if struct_ref in (None, ""):
+        return None
+    return resolve_struct_id(ctx, {"struct": struct_ref})
 
 
 def struct_def_by_id(ctx: BuildContext, struct_id: int) -> dict[str, Any] | None:
@@ -148,7 +180,12 @@ def encode_value_message(
             value = {}
         result += length_field(35, encode_struct_payload(ctx, effective_struct_id, value))
     elif type_code == 26:
-        items = value if isinstance(value, list) else []
+        if isinstance(value, list):
+            items = value
+        elif isinstance(value, dict):
+            items = [value]
+        else:
+            items = []
         body = b"".join(
             length_field(
                 1,
@@ -160,7 +197,7 @@ def encode_value_message(
         body += varint_field(501, effective_struct_id)
         result += length_field(36, body)
     elif type_code == 27:
-        result += length_field(37, encode_dict_payload(spec, ctx))
+        result += length_field(37, encode_dict_payload(spec, value, ctx))
     else:
         value_field = TYPE_INFO[type_code]["value_field"]
         result += length_field(value_field, encode_scalar_slot(type_code, value, ctx))
@@ -186,7 +223,17 @@ def encode_struct_payload(ctx: BuildContext, struct_id: int, values: dict[str, A
             continue
         type_code = int(field["type_code"])
         field_value = values.get(field_name)
-        field_spec: dict[str, Any] = {}
+        field_spec: dict[str, Any] = dict(field)
+        if "element_struct_id" in field:
+            field_spec["struct_id"] = field["element_struct_id"]
+        elif "struct_id" in field:
+            field_spec["struct_id"] = field["struct_id"]
+        if "dict_key_type_code" in field:
+            field_spec["key_type_code"] = field["dict_key_type_code"]
+        if "dict_value_type_code" in field:
+            field_spec["value_type_code"] = field["dict_value_type_code"]
+        if "dict_value_struct_id" in field:
+            field_spec["value_struct_id"] = field["dict_value_struct_id"]
         field_structs = values.get("__struct_types__", {})
         if isinstance(field_structs, dict) and field_name in field_structs:
             field_spec["struct"] = field_structs[field_name]
@@ -200,10 +247,26 @@ def encode_struct_payload(ctx: BuildContext, struct_id: int, values: dict[str, A
     return bytes(payload)
 
 
-def encode_dict_payload(spec: dict[str, Any], ctx: BuildContext) -> bytes:
-    key_code = type_code_from_name_or_code(spec, "key_type", "key_type_code", default=6)
-    value_code = type_code_from_name_or_code(spec, "value_type", "value_type_code", default=6)
-    entries = spec.get("entries", [])
+def encode_dict_payload(spec: dict[str, Any], value: Any, ctx: BuildContext) -> bytes:
+    dict_spec = dict(spec)
+    if isinstance(value, dict):
+        for key_name in (
+            "key_type",
+            "key_type_code",
+            "value_type",
+            "value_type_code",
+            "value_struct_id",
+            "value_structId",
+            "dict_value_struct_id",
+            "struct",
+            "struct_id",
+        ):
+            if key_name in value:
+                dict_spec[key_name] = value[key_name]
+    key_code = type_code_from_name_or_code(dict_spec, "key_type", "key_type_code", default=6)
+    value_code = type_code_from_name_or_code(dict_spec, "value_type", "value_type_code", default=6)
+    value_struct_id = optional_struct_id(ctx, dict_spec) if value_code in (25, 26) else None
+    entries = value.get("entries", []) if isinstance(value, dict) else dict_spec.get("entries", [])
     if entries:
         ctx.warn("dict custom entries are experimental; verify generated file in editor before using it as a base")
     payload = bytearray()
@@ -212,11 +275,22 @@ def encode_dict_payload(spec: dict[str, Any], ctx: BuildContext) -> bytes:
         item_value = entry.get("value") if isinstance(entry, dict) else None
         pair = (
             length_field(1, encode_value_message(key_code, key_value, ctx))
-            + length_field(1, encode_value_message(value_code, item_value, ctx, variable_spec=spec))
+            + length_field(
+                1,
+                encode_value_message(
+                    value_code,
+                    item_value,
+                    ctx,
+                    struct_id=value_struct_id,
+                    variable_spec=dict_spec,
+                ),
+            )
         )
         payload += length_field(1, length_field(35, pair))
     payload += varint_field(503, key_code)
     payload += varint_field(504, value_code)
+    if value_struct_id is not None:
+        payload += varint_field(505, value_struct_id)
     return bytes(payload)
 
 

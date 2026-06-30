@@ -47,6 +47,18 @@ def extract_struct_part(part: dict[str, Any]) -> dict[str, Any]:
         if nested_struct_id is not None and type_code in (25, 26):
             key_name = "element_struct_id" if type_code == 26 else "struct_id"
             field_doc[key_name] = nested_struct_id
+        dict_value = first_field(children(first_field(item_children, 3)), 37)
+        if dict_value is not None and type_code == 27:
+            dict_fields = children(dict_value)
+            key_type_code = varint(dict_fields, 503)
+            value_type_code = varint(dict_fields, 504)
+            value_struct_id = varint(dict_fields, 505)
+            if isinstance(key_type_code, int):
+                field_doc["dict_key_type_code"] = key_type_code
+            if isinstance(value_type_code, int):
+                field_doc["dict_value_type_code"] = value_type_code
+            if isinstance(value_struct_id, int):
+                field_doc["dict_value_struct_id"] = value_struct_id
         fields.append(field_doc)
 
     fields.sort(key=lambda item: item["index"] if isinstance(item.get("index"), int) else 10**9)

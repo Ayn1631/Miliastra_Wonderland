@@ -1890,6 +1890,18 @@ def page_story_builder() -> None:
         st.error(f"找不到编辑器 HTML：{html_path}")
 
 
+def show_build_error(title: str, exc: Exception) -> None:
+    st.error(f"{title}：{exc}")
+    with st.expander("查看详细错误"):
+        st.exception(exc)
+
+
+def show_summary_warnings(summary: dict[str, Any]) -> None:
+    warnings = summary.get("warnings") or []
+    if warnings:
+        st.warning("生成完成，但存在警告：\n\n" + "\n".join(f"- {item}" for item in warnings))
+
+
 def page_extract_structs() -> None:
     st.header("导出结构体 JSON")
     uploaded = st.file_uploader("上传 .gil 或 .gia", type=["gil", "gia"], key="extract_structs_source")
@@ -1899,7 +1911,7 @@ def page_extract_structs() -> None:
             with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
                 result = parse_structs_upload(uploaded)
         except Exception as exc:
-            st.exception(exc)
+            show_build_error("结构体解析失败", exc)
             return
         data = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
         st.success(
@@ -1993,9 +2005,10 @@ def page_components_builder() -> None:
             try:
                 summary = build_components_gil(input_gil, components_json, template_gil, output_gil)
             except Exception as exc:
-                st.exception(exc)
+                show_build_error("GIL 编译失败", exc)
                 return
             st.success("GIL 已生成")
+            show_summary_warnings(summary)
             st.json(summary, expanded=False)
             st.download_button("下载处理后的 GIL", output_gil.read_bytes(), file_name=output_gil.name)
 
@@ -2232,9 +2245,10 @@ def page_story_gil_export() -> None:
                     int(max_lines),
                 )
             except Exception as exc:
-                st.exception(exc)
+                show_build_error("GIL 编译失败", exc)
                 return
             st.success("GIL 已生成")
+            show_summary_warnings(summary)
             st.json(summary, expanded=False)
             st.download_button("下载处理后的 GIL", output_gil.read_bytes(), file_name=output_gil.name)
 
@@ -2304,7 +2318,7 @@ def page_camera_generator() -> None:
                 version=version,
             )
         except Exception as exc:
-            st.exception(exc)
+            show_build_error("GIA 编译失败", exc)
             return
         st.success(f"GIA 已生成：{len(data)} bytes")
         st.download_button("下载镜头 GIA", data, file_name=output_name)
