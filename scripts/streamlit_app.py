@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import math
 import tempfile
@@ -385,6 +386,7 @@ PARAM_TYPE_BY_CODE = {
     11: "StringList",
     25: "Struct",
     26: "StructList",
+    27: "Dict",
 }
 
 LIST_TYPE_CODES = {7, 8, 9, 10, 11, 13, 15, 22, 23, 24}
@@ -515,6 +517,12 @@ def struct_doc_identity(struct_doc: dict[str, Any]) -> str:
     return f"object:{id(struct_doc)}"
 
 
+def param_type_name(type_code: int | None) -> str:
+    if type_code is None:
+        return "Unknown"
+    return PARAM_TYPE_BY_CODE.get(type_code) or TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}")
+
+
 def default_value_for_type(type_code: int) -> Any:
     if type_code == 6:
         return ""
@@ -531,7 +539,7 @@ def default_value_for_type(type_code: int) -> Any:
     if type_code == 26:
         return []
     if type_code == 27:
-        return {"entries": []}
+        return {"type": "Dict", "key_type": "Int32", "value_type": "String", "value": []}
     return None
 
 
@@ -693,6 +701,66 @@ def parse_gia_struct_schema_candidate(
     }
 
 
+def parse_gia_inline_struct_layout_candidate(
+    candidate: dict[str, Any],
+    *,
+    source_record_index: int,
+    schema_path: str,
+) -> dict[str, Any] | None:
+    candidate_fields = gia_chapters.children(candidate)
+    struct_id = gia_chapters.varint(candidate_fields, 501)
+    field_messages = gia_chapters.all_fields(candidate_fields, 1)
+    if not isinstance(struct_id, int) or not field_messages:
+        return None
+
+    fields: list[dict[str, Any]] = []
+    for index, field_message in enumerate(field_messages, start=1):
+        field_fields = gia_chapters.children(field_message)
+        field_name = gia_chapters.utf8(field_fields, 501)
+        type_code = gia_chapters.varint(field_fields, 1)
+        if not field_name or type_code is None:
+            return None
+
+        field_doc = {
+            "index": index,
+            "name": field_name,
+            "type_code": int(type_code),
+            "type": TYPE_INFO.get(int(type_code), {}).get("name", f"type_{type_code}"),
+        }
+
+        nested_struct_id = nested_varint_value(field_message, [2, 2, 2])
+        if nested_struct_id is not None and int(type_code) in (25, 26):
+            key_name = "element_struct_id" if int(type_code) == 26 else "struct_id"
+            field_doc[key_name] = int(nested_struct_id)
+
+        if int(type_code) == 27:
+            dict_meta = gia_chapters.first_field(field_fields, 37)
+            dict_fields = gia_chapters.children(dict_meta)
+            key_type_code = gia_chapters.varint(dict_fields, 503)
+            value_type_code = gia_chapters.varint(dict_fields, 504)
+            value_struct_id = gia_chapters.varint(dict_fields, 505)
+            if key_type_code is not None:
+                field_doc["dict_key_type_code"] = int(key_type_code)
+            if value_type_code is not None:
+                field_doc["dict_value_type_code"] = int(value_type_code)
+            if value_struct_id is not None:
+                field_doc["dict_value_struct_id"] = int(value_struct_id)
+
+        fields.append(field_doc)
+
+    return {
+        "id": int(struct_id),
+        "name": f"struct_{struct_id}",
+        "field_count": len(fields),
+        "fields": fields,
+        "schema_offset": candidate.get("offset"),
+        "schema_length": candidate.get("length"),
+        "source_record_index": source_record_index,
+        "schema_path": schema_path,
+        "layout_source": "gia_inline_layout",
+    }
+
+
 def extract_structs_from_gia_schema(gia_path: Path) -> dict[str, Any]:
     data = gia_path.read_bytes()
     if len(data) < gia_chapters.HEADER_SIZE + gia_chapters.FOOTER_SIZE:
@@ -705,31 +773,50 @@ def extract_structs_from_gia_schema(gia_path: Path) -> dict[str, Any]:
 
     root = gia_chapters.parse_message(data[gia_chapters.HEADER_SIZE : payload_end], gia_chapters.HEADER_SIZE)
     structs: list[dict[str, Any]] = []
+    inline_layouts: dict[int, dict[str, Any]] = {}
     seen_signatures: set[tuple[int, str]] = set()
 
     for record_index, record in enumerate(gia_chapters.all_fields(root, 1), start=1):
         struct_id = nested_varint_value(record, [1, 4])
-        if struct_id is None:
-            continue
 
         for candidate in iter_message_tree(record):
-            schema = parse_gia_struct_schema_candidate(
+            inline_schema = parse_gia_inline_struct_layout_candidate(
                 candidate,
-                int(struct_id),
                 source_record_index=record_index,
                 schema_path=f"record[{record_index}]",
             )
-            if not schema:
-                continue
-            signature = (schema["id"], schema["name"])
-            if signature in seen_signatures:
-                continue
-            seen_signatures.add(signature)
-            structs.append(schema)
-            break
+            if inline_schema:
+                existing = inline_layouts.get(inline_schema["id"])
+                if existing is None or inline_schema["field_count"] > existing["field_count"]:
+                    inline_layouts[inline_schema["id"]] = inline_schema
+
+            if struct_id is not None:
+                schema = parse_gia_struct_schema_candidate(
+                    candidate,
+                    int(struct_id),
+                    source_record_index=record_index,
+                    schema_path=f"record[{record_index}]",
+                )
+                if not schema:
+                    continue
+                signature = (schema["id"], schema["name"])
+                if signature in seen_signatures:
+                    continue
+                seen_signatures.add(signature)
+                structs.append(schema)
 
     if not structs:
         raise ValueError("没有在 GIA 中找到结构体定义记录。")
+
+    for struct_doc in structs:
+        inline_schema = inline_layouts.get(int(struct_doc["id"]))
+        if not inline_schema:
+            continue
+        struct_doc["fields"] = inline_schema["fields"]
+        struct_doc["field_count"] = inline_schema["field_count"]
+        struct_doc["layout_source"] = inline_schema["layout_source"]
+        struct_doc["layout_offset"] = inline_schema.get("schema_offset")
+        struct_doc["layout_length"] = inline_schema.get("schema_length")
 
     return {
         "file": str(gia_path),
@@ -797,13 +884,13 @@ def struct_id_text(struct_doc: dict[str, Any]) -> str:
     return str(struct_id)
 
 
-def coerce_param_value(type_code: int, value: Any) -> Any:
+def coerce_param_value(type_code: int, value: Any, field: dict[str, Any] | None = None) -> Any:
     if type_code in (3, 17, 20, 21):
-        return int(value or 0)
+        return str(int(value or 0))
     if type_code == 4:
         return bool(value)
     if type_code == 5:
-        return float(value or 0.0)
+        return f"{float(value or 0.0):.2f}"
     if type_code == 6:
         return "" if value is None else str(value)
     if type_code in (8, 24):
@@ -832,6 +919,23 @@ def coerce_param_value(type_code: int, value: Any) -> Any:
             for item in vectors
             if isinstance(item, dict)
         ]
+    if type_code == 27:
+        field = field or {}
+        key_type_code = field.get("dict_key_type_code")
+        value_type_code = field.get("dict_value_type_code")
+        value_struct_id = field.get("dict_value_struct_id")
+        existing = value if isinstance(value, dict) else {}
+        result = {
+            "type": "Dict",
+            "key_type": param_type_name(int(key_type_code)) if key_type_code is not None else existing.get("key_type") or "Int32",
+            "value_type": param_type_name(int(value_type_code)) if value_type_code is not None else existing.get("value_type") or "String",
+            "value": existing.get("value") if isinstance(existing.get("value"), list) else [],
+        }
+        if value_struct_id is not None:
+            result["value_structId"] = str(value_struct_id)
+        elif existing.get("value_structId") is not None:
+            result["value_structId"] = str(existing.get("value_structId"))
+        return result
     return value
 
 
@@ -886,7 +990,7 @@ def struct_value_to_data_json(
         params.append(
             {
                 "param_type": param_type,
-                "value": coerce_param_value(type_code, field_value),
+                "value": coerce_param_value(type_code, field_value, field),
             }
         )
 
@@ -895,6 +999,79 @@ def struct_value_to_data_json(
         "type": "Struct",
         "value": params,
     }
+
+
+def coerce_widget_value(type_code: int, raw_value: Any) -> Any:
+    if type_code in (3, 17, 20, 21):
+        return int(raw_value or 0)
+    if type_code == 4:
+        return bool(raw_value)
+    if type_code == 5:
+        return float(raw_value or 0.0)
+    if type_code == 6:
+        return "" if raw_value is None else str(raw_value)
+    if type_code in (8, 24):
+        return [int(item or 0) for item in (raw_value or [])]
+    if type_code == 9:
+        return [bool(item) for item in (raw_value or [])]
+    if type_code == 10:
+        return [float(item or 0.0) for item in (raw_value or [])]
+    if type_code in (7, 11, 13, 22, 23):
+        return [str(item) for item in (raw_value or [])]
+    if type_code in (12, 27):
+        return raw_value if isinstance(raw_value, dict) else default_value_for_type(type_code)
+    if type_code == 15:
+        return raw_value if isinstance(raw_value, list) else []
+    return raw_value
+
+
+def data_json_to_struct_value(
+    struct_doc: dict[str, Any],
+    structs_doc: dict[str, Any],
+    data_json: dict[str, Any],
+) -> dict[str, Any]:
+    params = data_json.get("value") if isinstance(data_json, dict) else None
+    if not isinstance(params, list):
+        return {}
+
+    value: dict[str, Any] = {}
+    fields = sorted(struct_doc.get("fields", []), key=lambda item: int(item.get("index", 0)))
+    for index, field in enumerate(fields):
+        param = params[index] if index < len(params) else None
+        if not isinstance(param, dict):
+            continue
+        field_name = str(field.get("name") or "").strip()
+        if not field_name:
+            continue
+        type_code = int(field.get("type_code", 0))
+        expected_param_type = param_type_name(type_code)
+        actual_param_type = str(param.get("param_type") or "")
+        if actual_param_type.lower() != expected_param_type.lower():
+            raise ValueError(
+                f"结构体 {struct_doc.get('name') or struct_doc.get('id')} 第 {index + 1} 位字段 "
+                f"{field_name} 期望 {expected_param_type}，但数据 JSON 是 {actual_param_type}。"
+                "已停止导入，避免按类型重排导致字段错位。"
+            )
+        raw_value = param.get("value")
+
+        if type_code == 25 and isinstance(raw_value, dict):
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            value[field_name] = data_json_to_struct_value(nested_doc, structs_doc, raw_value) if nested_doc else {}
+            continue
+
+        if type_code == 26 and isinstance(raw_value, dict):
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            raw_items = raw_value.get("value") if isinstance(raw_value.get("value"), list) else []
+            items: list[dict[str, Any]] = []
+            for raw_item in raw_items:
+                item_value = raw_item.get("value") if isinstance(raw_item, dict) else None
+                if nested_doc and isinstance(item_value, dict):
+                    items.append(data_json_to_struct_value(nested_doc, structs_doc, item_value))
+            value[field_name] = items
+            continue
+
+        value[field_name] = coerce_widget_value(type_code, raw_value)
+    return value
 
 
 def find_gia_variable_list(component_record: dict[str, Any]) -> dict[str, Any]:
@@ -1050,63 +1227,73 @@ def list_count_controls(key: str, *, default_count: int = 0, max_count: int = 20
     return current
 
 
-def render_list_item_input(type_code: int, key: str, index: int) -> Any:
+def render_list_item_input(type_code: int, key: str, index: int, initial_value: Any = None) -> Any:
     label = f"第 {index + 1} 项"
     if type_code in (8, 24):
-        return int(st.number_input(label, value=0, step=1, key=key, label_visibility="collapsed"))
+        return int(st.number_input(label, value=int(initial_value or 0), step=1, key=key, label_visibility="collapsed"))
     if type_code == 10:
-        return float(st.number_input(label, value=0.0, key=key, label_visibility="collapsed"))
+        return float(st.number_input(label, value=float(initial_value or 0.0), key=key, label_visibility="collapsed"))
     if type_code == 9:
-        return st.checkbox(label, value=False, key=key)
+        return st.checkbox(label, value=bool(initial_value), key=key)
     if type_code == 15:
+        vector = initial_value if isinstance(initial_value, dict) else {}
         return {
-            "x": float(st.number_input("x", value=0.0, key=f"{key}_x")),
-            "y": float(st.number_input("y", value=0.0, key=f"{key}_y")),
-            "z": float(st.number_input("z", value=0.0, key=f"{key}_z")),
+            "x": float(st.number_input("x", value=float(vector.get("x") or 0.0), key=f"{key}_x")),
+            "y": float(st.number_input("y", value=float(vector.get("y") or 0.0), key=f"{key}_y")),
+            "z": float(st.number_input("z", value=float(vector.get("z") or 0.0), key=f"{key}_z")),
         }
-    return st.text_input(label, value="", key=key, label_visibility="collapsed")
+    return st.text_input(label, value="" if initial_value is None else str(initial_value), key=key, label_visibility="collapsed")
 
 
-def render_list_field_input(type_code: int, key: str) -> list[Any]:
-    count = list_count_controls(key, default_count=0)
+def render_list_field_input(type_code: int, key: str, initial_value: Any = None) -> list[Any]:
+    initial_items = initial_value if isinstance(initial_value, list) else []
+    count = list_count_controls(key, default_count=len(initial_items))
     values: list[Any] = []
     for index in range(count):
         st.markdown(
             f'<div class="qx-field-meta">#{index + 1}</div>',
             unsafe_allow_html=True,
         )
-        values.append(render_list_item_input(type_code, f"{key}_item_{index}", index))
+        item_initial = initial_items[index] if index < len(initial_items) else None
+        values.append(render_list_item_input(type_code, f"{key}_item_{index}", index, item_initial))
     return values
 
 
-def render_scalar_field_input(field: dict[str, Any], key: str, *, compact: bool = False) -> Any:
+def render_scalar_field_input(
+    field: dict[str, Any],
+    key: str,
+    *,
+    compact: bool = False,
+    initial_value: Any = None,
+) -> Any:
     field_name = str(field.get("name") or "")
     type_code = int(field.get("type_code", 0))
     type_name = field.get("type") or TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}")
     label = f"{field_name} ({type_name})"
     label_visibility = "collapsed" if compact else "visible"
     if type_code in LIST_TYPE_CODES:
-        return render_list_field_input(type_code, key)
+        return render_list_field_input(type_code, key, initial_value)
     if type_code == 6:
-        return st.text_input(label, value="", key=key, label_visibility=label_visibility)
+        return st.text_input(label, value="" if initial_value is None else str(initial_value), key=key, label_visibility=label_visibility)
     if type_code == 3:
-        return int(st.number_input(label, value=0, step=1, key=key, label_visibility=label_visibility))
+        return int(st.number_input(label, value=int(initial_value or 0), step=1, key=key, label_visibility=label_visibility))
     if type_code == 5:
-        return float(st.number_input(label, value=0.0, key=key, label_visibility=label_visibility))
+        return float(st.number_input(label, value=float(initial_value or 0.0), key=key, label_visibility=label_visibility))
     if type_code == 4:
-        return st.checkbox(label, value=False, key=key, label_visibility=label_visibility)
+        return st.checkbox(label, value=bool(initial_value), key=key, label_visibility=label_visibility)
     if type_code == 12:
+        vector = initial_value if isinstance(initial_value, dict) else {}
         if compact:
             return {
-                "x": float(st.number_input("x", value=0.0, key=f"{key}_x")),
-                "y": float(st.number_input("y", value=0.0, key=f"{key}_y")),
-                "z": float(st.number_input("z", value=0.0, key=f"{key}_z")),
+                "x": float(st.number_input("x", value=float(vector.get("x") or 0.0), key=f"{key}_x")),
+                "y": float(st.number_input("y", value=float(vector.get("y") or 0.0), key=f"{key}_y")),
+                "z": float(st.number_input("z", value=float(vector.get("z") or 0.0), key=f"{key}_z")),
             }
         cols = st.columns(3)
         return {
-            "x": float(cols[0].number_input("x", value=0.0, key=f"{key}_x")),
-            "y": float(cols[1].number_input("y", value=0.0, key=f"{key}_y")),
-            "z": float(cols[2].number_input("z", value=0.0, key=f"{key}_z")),
+            "x": float(cols[0].number_input("x", value=float(vector.get("x") or 0.0), key=f"{key}_x")),
+            "y": float(cols[1].number_input("y", value=float(vector.get("y") or 0.0), key=f"{key}_y")),
+            "z": float(cols[2].number_input("z", value=float(vector.get("z") or 0.0), key=f"{key}_z")),
         }
     st.caption(f"{label} 暂按默认空值导出。")
     return default_value_for_type(type_code)
@@ -1119,8 +1306,10 @@ def render_struct_value_editor(
     *,
     depth: int = 0,
     ancestor_structs: tuple[str, ...] = (),
+    initial_value: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     value: dict[str, Any] = {}
+    initial_value = initial_value if isinstance(initial_value, dict) else {}
     current_struct_key = struct_doc_identity(struct_doc)
     current_ancestors = ancestor_structs + (current_struct_key,)
     st.markdown('<div class="qx-field-table-title">字段表格编辑</div>', unsafe_allow_html=True)
@@ -1136,6 +1325,7 @@ def render_struct_value_editor(
         type_code = int(field.get("type_code", 0))
         type_name = field.get("type") or TYPE_INFO.get(type_code, {}).get("name", f"type_{type_code}")
         field_key = f"{key_prefix}_{field_name}_{type_code}_{depth}"
+        field_initial = initial_value.get(field_name)
         st.markdown('<div class="qx-field-divider"></div>', unsafe_allow_html=True)
         field_cols = st.columns([1.5, 1.0, 3.7])
         field_cols[0].markdown(
@@ -1172,6 +1362,7 @@ def render_struct_value_editor(
                         f"{field_key}_nested",
                         depth=depth + 1,
                         ancestor_structs=current_ancestors,
+                        initial_value=field_initial if isinstance(field_initial, dict) else {},
                     )
             else:
                 st.error(f"{field_name} 的结构定义里没有可解析的内层结构体类型。")
@@ -1187,7 +1378,8 @@ def render_struct_value_editor(
                     key=f"{field_key}_struct_list_fixed",
                     label_visibility="collapsed",
                 )
-                count = list_count_controls(field_key, default_count=1 if depth == 0 else 0)
+                initial_items = field_initial if isinstance(field_initial, list) else []
+                count = list_count_controls(field_key, default_count=len(initial_items) if initial_items else (1 if depth == 0 else 0))
             st.markdown(
                 '<div class="qx-nested-note">列表项按下方展开区逐项编辑。</div>',
                 unsafe_allow_html=True,
@@ -1203,6 +1395,7 @@ def render_struct_value_editor(
                                 f"{field_key}_item_{index}",
                                 depth=depth + 1,
                                 ancestor_structs=current_ancestors,
+                                initial_value=initial_items[index] if index < len(initial_items) else {},
                             )
                         )
                 else:
@@ -1211,7 +1404,7 @@ def render_struct_value_editor(
             value[field_name] = items
             continue
         with field_cols[2]:
-            value[field_name] = render_scalar_field_input(field, field_key, compact=True)
+            value[field_name] = render_scalar_field_input(field, field_key, compact=True, initial_value=field_initial)
     return value
 
 
@@ -1608,6 +1801,8 @@ def page_import_variables() -> None:
     st.caption("上传结构体 JSON、结构体定义 GIA 或地图 GIL 后，按字段可视化编辑一个结构体值，并导出为 P2Gia 同格式的数据结构 JSON。")
 
     structs_doc: dict[str, Any] | None = None
+    initial_data_json: dict[str, Any] | None = None
+    initial_data_token = "empty"
     structs_upload = st.file_uploader(
         "上传结构体格式 structs.json、数据结构.gia 或 地图.gil",
         type=["json", "gia", "gil"],
@@ -1630,12 +1825,42 @@ def page_import_variables() -> None:
         st.info("先上传从“导出结构体 JSON”得到的 structs.json，或上传包含结构体定义的 数据结构.gia / 地图.gil。")
         return
 
+    data_upload = st.file_uploader(
+        "可选：上传已有数据结构 JSON（例如导出的对话.json）",
+        type=["json"],
+        key="visual_struct_value_source",
+    )
+    if data_upload:
+        try:
+            raw_data = data_upload.getvalue()
+            initial_data_json = json.loads(decode_text_bytes(raw_data))
+            if not isinstance(initial_data_json, dict) or not initial_data_json.get("structId"):
+                raise ValueError("数据 JSON 必须是 P2Gia 同格式对象，并包含 structId。")
+            initial_data_token = hashlib.sha1(raw_data).hexdigest()[:12]
+            st.success(f"已读取初始数据：structId={initial_data_json.get('structId')}")
+        except Exception as exc:
+            st.error(f"数据结构 JSON 解析失败：{exc}")
+            initial_data_json = None
+            initial_data_token = "invalid"
+
     struct_names = [
         str(item.get("name") or item.get("id"))
         for item in structs_doc.get("structs", [])
         if item.get("name") or item.get("id")
     ]
-    selected_struct = st.selectbox("选择要编辑的结构体", struct_names, key="visual_struct_name")
+    default_struct_index = 0
+    if initial_data_json:
+        initial_struct_id = str(initial_data_json.get("structId"))
+        for index, item in enumerate(structs_doc.get("structs", [])):
+            if str(item.get("id")) == initial_struct_id:
+                default_struct_index = index
+                break
+    selected_struct = st.selectbox(
+        "选择要编辑的结构体",
+        struct_names,
+        index=min(default_struct_index, max(len(struct_names) - 1, 0)),
+        key=f"visual_struct_name_{initial_data_token}",
+    )
     selected_struct_doc = find_struct_doc(structs_doc, selected_struct)
     if not selected_struct_doc:
         st.error("未找到选中的结构体。")
@@ -1657,7 +1882,21 @@ def page_import_variables() -> None:
         )
 
     st.subheader("编辑结构体字段")
-    value = render_struct_value_editor(selected_struct_doc, structs_doc, "visual_struct_editor")
+    try:
+        initial_value = (
+            data_json_to_struct_value(selected_struct_doc, structs_doc, initial_data_json)
+            if initial_data_json and str(initial_data_json.get("structId")) == str(selected_struct_doc.get("id"))
+            else {}
+        )
+    except Exception as exc:
+        st.error(f"初始数据 JSON 与当前结构体顺序不一致：{exc}")
+        return
+    value = render_struct_value_editor(
+        selected_struct_doc,
+        structs_doc,
+        f"visual_struct_editor_{selected_struct_doc.get('id')}_{initial_data_token}",
+        initial_value=initial_value,
+    )
     try:
         data_json = struct_value_to_data_json(selected_struct_doc, structs_doc, value)
         preview_json = json.dumps(data_json, ensure_ascii=False, indent=4) + "\n"
