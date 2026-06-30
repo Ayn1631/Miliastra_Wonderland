@@ -23,7 +23,7 @@ DEFAULT_TEMPLATE_GIL = RESOURCES_DIR / "gil_templates" / "Template.gil"
 DEFAULT_TEMPLATE_GIA = RESOURCES_DIR / "gil_templates" / "Template.gia"
 COMPONENTS_EXAMPLE_JSON = GIL_WORKFLOW_DIR / "components.example.json"
 COMPONENTS_JSON_GUIDE = GIL_WORKFLOW_DIR / "COMPONENTS_JSON_GUIDE.md"
-STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v5-keyed-sample"
+STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v6-schema-message-order"
 STORY_PAGE_CSS = """
 <style>
 html,
@@ -628,7 +628,7 @@ def parse_gia_struct_schema_candidate(
         return None
 
     fields: list[dict[str, Any]] = []
-    for field_message in field_messages:
+    for field_order, field_message in enumerate(field_messages, start=1):
         field_fields = gia_chapters.children(field_message)
         field_name = gia_chapters.utf8(field_fields, 501) or gia_chapters.utf8(field_fields, 5)
         type_code = gia_chapters.varint(field_fields, 502)
@@ -636,7 +636,8 @@ def parse_gia_struct_schema_candidate(
         if not field_name or type_code is None or field_index is None:
             return None
         field_doc = {
-            "index": int(field_index),
+            "index": field_order,
+            "schema_index": int(field_index),
             "name": field_name,
             "type_code": int(type_code),
             "type": TYPE_INFO.get(int(type_code), {}).get("name", f"type_{type_code}"),
@@ -647,7 +648,6 @@ def parse_gia_struct_schema_candidate(
             field_doc[key_name] = int(nested_struct_id)
         fields.append(field_doc)
 
-    fields.sort(key=lambda item: item["index"])
     return {
         "id": int(struct_id),
         "name": struct_name,
@@ -657,6 +657,7 @@ def parse_gia_struct_schema_candidate(
         "schema_length": candidate.get("length"),
         "source_record_index": source_record_index,
         "schema_path": schema_path,
+        "layout_source": "gia_schema_message_order",
     }
 
 
@@ -1157,7 +1158,7 @@ def data_json_to_struct_value(
 def struct_order_is_extracted(struct_doc: dict[str, Any], structs_doc: dict[str, Any]) -> bool:
     if structs_doc.get("source_format") != "gia":
         return True
-    return struct_doc.get("layout_source") in ("gia_inline_layout", "keyed_export_json")
+    return struct_doc.get("layout_source") in ("gia_inline_layout", "gia_schema_message_order", "keyed_export_json")
 
 
 def param_at(data_json: dict[str, Any] | None, index: int) -> dict[str, Any] | None:
