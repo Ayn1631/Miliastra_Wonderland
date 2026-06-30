@@ -365,6 +365,7 @@ def build_variable(variable_spec: dict[str, Any], templates: dict[str, Any], ctx
     name_field = first_field(children(variable), 2)
     type_field = first_field(children(variable), 3)
     value_field = first_field(children(variable), 4)
+    type_ref_field = first_field(children(variable), 6)
     if name_field is None or type_field is None or value_field is None:
         raise ValueError(f"invalid variable template for spec: {variable_spec}")
 
@@ -373,6 +374,12 @@ def build_variable(variable_spec: dict[str, Any], templates: dict[str, Any], ctx
     mark_dirty(type_field)
     value = variable_spec.get("value")
     value_field["_raw_override"] = encode_value_message(type_code, value, ctx, variable_spec=variable_spec)
+    if type_ref_field is not None and type_code in (25, 26):
+        type_ref_field["_raw_override"] = protobuf_type_ref(type_code, resolve_struct_id(ctx, variable_spec))
+        mark_dirty(type_ref_field)
+    elif type_ref_field is not None and type_code != 27:
+        type_ref_field["_raw_override"] = protobuf_type_ref(type_code)
+        mark_dirty(type_ref_field)
     mark_dirty(variable)
     return variable
 

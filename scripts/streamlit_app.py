@@ -1970,8 +1970,7 @@ def page_components_builder() -> None:
                 height=360,
                 key="components_json_text_input",
             )
-        # template_upload = st.file_uploader("Template.gil，可不传", type=["gil"], key="components_template")
-        template_upload = None
+        template_upload = st.file_uploader("Template.gil，可不传", type=["gil"], key="components_template")
         output_name = st.text_input("输出文件名", value="components_output.gil")
         submitted = st.form_submit_button("生成 GIL", type="primary")
 
