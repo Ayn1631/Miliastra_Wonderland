@@ -431,6 +431,21 @@ def parse_structs_upload_cached(file_name: str, raw: bytes, parser_version: str)
     raise ValueError("只支持 .json、.gia 或 .gil。")
 
 
+def parse_structs_upload(uploaded_file: Any) -> dict[str, Any]:
+    return parse_structs_upload_cached(
+        uploaded_file.name,
+        uploaded_file.getvalue(),
+        STRUCT_PARSER_CACHE_VERSION,
+    )
+
+
+def structs_doc_summary(structs_doc: dict[str, Any], fallback_suffix: str = "") -> str:
+    struct_count = int(structs_doc.get("struct_count") or len(structs_doc.get("structs", [])))
+    source_format = structs_doc.get("source_format") or fallback_suffix.lstrip(".") or "json"
+    extraction_mode = structs_doc.get("extraction_mode") or "structs_json"
+    return f"{struct_count} 个（{source_format} / {extraction_mode}）"
+
+
 def default_components_json_text() -> str:
     if COMPONENTS_EXAMPLE_JSON.exists():
         return COMPONENTS_EXAMPLE_JSON.read_text(encoding="utf-8")
@@ -1882,14 +1897,14 @@ def page_extract_structs() -> None:
         suffix = Path(uploaded.name).suffix.lower()
         try:
             with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
-                result = parse_structs_upload_cached(uploaded.name, uploaded.getvalue(), STRUCT_PARSER_CACHE_VERSION)
+                result = parse_structs_upload(uploaded)
         except Exception as exc:
             st.exception(exc)
             return
         data = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
         st.success(
             f"已识别为 {result.get('source_format', suffix.lstrip('.')).upper()}，"
-            f"提取到 {result.get('struct_count', 0)} 个结构体"
+            f"提取到 {structs_doc_summary(result, suffix)}"
         )
         st.json(result, expanded=False)
         st.download_button(
@@ -1974,11 +1989,8 @@ def page_import_variables() -> None:
         try:
             suffix = Path(structs_upload.name).suffix.lower()
             with st.spinner("正在解析结构体，首次解析后会缓存结果..."):
-                structs_doc = parse_structs_upload_cached(structs_upload.name, structs_upload.getvalue(), STRUCT_PARSER_CACHE_VERSION)
-            struct_count = int(structs_doc.get("struct_count") or len(structs_doc.get("structs", [])))
-            source_format = structs_doc.get("source_format") or suffix.lstrip(".")
-            extraction_mode = structs_doc.get("extraction_mode") or "structs_json"
-            st.success(f"已读取结构体：{struct_count} 个（{source_format} / {extraction_mode}）")
+                structs_doc = parse_structs_upload(structs_upload)
+            st.success(f"已读取结构体：{structs_doc_summary(structs_doc, suffix)}")
         except Exception as exc:
             st.error(f"结构体格式解析失败：{exc}")
             structs_doc = None
