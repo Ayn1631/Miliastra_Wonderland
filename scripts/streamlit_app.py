@@ -23,7 +23,7 @@ DEFAULT_TEMPLATE_GIL = RESOURCES_DIR / "gil_templates" / "Template.gil"
 DEFAULT_TEMPLATE_GIA = RESOURCES_DIR / "gil_templates" / "Template.gia"
 COMPONENTS_EXAMPLE_JSON = GIL_WORKFLOW_DIR / "components.example.json"
 COMPONENTS_JSON_GUIDE = GIL_WORKFLOW_DIR / "COMPONENTS_JSON_GUIDE.md"
-STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v4-order-sample"
+STRUCT_PARSER_CACHE_VERSION = "gia-inline-layout-v5-keyed-sample"
 STORY_PAGE_CSS = """
 <style>
 html,
@@ -966,6 +966,121 @@ def struct_value_to_data_json(
     }
 
 
+def unwrap_exported_param(param: dict[str, Any]) -> dict[str, Any]:
+    wrapped = param.get("value")
+    if isinstance(wrapped, dict) and isinstance(wrapped.get("value"), (dict, list, str, int, float, bool, type(None))):
+        if str(wrapped.get("param_type") or "").lower() == str(param.get("param_type") or "").lower():
+            return wrapped
+    return param
+
+
+def is_keyed_export_json(data: Any) -> bool:
+    if not isinstance(data, dict):
+        return False
+    params = data.get("value")
+    return isinstance(params, list) and any(isinstance(item, dict) and "key" in item for item in params)
+
+
+def find_struct_doc_by_name_or_id(structs_doc: dict[str, Any], name_or_id: Any) -> dict[str, Any] | None:
+    text = str(name_or_id or "")
+    return find_struct_doc(structs_doc, text)
+
+
+def reorder_struct_fields_from_keyed_export(
+    struct_doc: dict[str, Any],
+    export_json: dict[str, Any],
+) -> bool:
+    params = export_json.get("value") if isinstance(export_json, dict) else None
+    if not isinstance(params, list):
+        return False
+
+    fields = list(struct_doc.get("fields", []))
+    fields_by_name = {str(field.get("name") or ""): field for field in fields}
+    ordered_fields: list[dict[str, Any]] = []
+    used_names: set[str] = set()
+
+    for param in params:
+        key = str(param.get("key") or "") if isinstance(param, dict) else ""
+        if not key or key not in fields_by_name:
+            return False
+        field = copy.deepcopy(fields_by_name[key])
+        expected_type = param_type_name(int(field.get("type_code", 0)))
+        actual_type = str(param.get("param_type") or "")
+        if actual_type.lower() != expected_type.lower():
+            raise ValueError(f"{struct_doc.get('name')} 字段 {key} 期望 {expected_type}，但导出 JSON 是 {actual_type}。")
+        used_names.add(key)
+        ordered_fields.append(field)
+
+    if len(ordered_fields) != len(fields):
+        missing = [str(field.get("name") or "") for field in fields if str(field.get("name") or "") not in used_names]
+        raise ValueError(f"{struct_doc.get('name')} 的导出 JSON 没有覆盖全部字段：{', '.join(missing)}")
+
+    for index, field in enumerate(ordered_fields, start=1):
+        field["index"] = index
+    struct_doc["fields"] = ordered_fields
+    struct_doc["field_count"] = len(ordered_fields)
+    struct_doc["layout_source"] = "keyed_export_json"
+    return True
+
+
+def keyed_export_to_data_json(
+    export_json: dict[str, Any],
+    struct_doc: dict[str, Any],
+    structs_doc: dict[str, Any],
+) -> dict[str, Any]:
+    params = export_json.get("value") if isinstance(export_json, dict) else None
+    if not isinstance(params, list):
+        raise ValueError("导出变量 JSON 缺少 value 数组。")
+
+    converted_params: list[dict[str, Any]] = []
+    for field, param in zip(sorted(struct_doc.get("fields", []), key=lambda item: int(item.get("index", 0))), params):
+        if not isinstance(param, dict):
+            continue
+        inner = unwrap_exported_param(param)
+        converted = {"param_type": inner.get("param_type") or param.get("param_type"), "value": inner.get("value")}
+        type_code = int(field.get("type_code", 0))
+        if type_code == 25 and isinstance(converted.get("value"), dict):
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            if nested_doc:
+                converted["value"] = normalize_export_data_json(converted["value"], structs_doc, nested_doc)
+        elif type_code == 26 and isinstance(converted.get("value"), dict):
+            nested_doc = resolve_nested_struct_doc(field, structs_doc)
+            raw_list = converted["value"]
+            items = raw_list.get("value") if isinstance(raw_list.get("value"), list) else []
+            normalized_items: list[dict[str, Any]] = []
+            for item in items:
+                if isinstance(item, dict) and item.get("param_type") == "Struct" and isinstance(item.get("value"), dict):
+                    item_value = item["value"]
+                    if nested_doc:
+                        item_value = normalize_export_data_json(item_value, structs_doc, nested_doc)
+                    normalized_items.append({"param_type": "Struct", "value": item_value})
+            nested_struct_id = raw_list.get("structId")
+            if not nested_struct_id and nested_doc:
+                nested_struct_id = struct_id_text(nested_doc)
+            converted["value"] = {"structId": nested_struct_id, "value": normalized_items}
+        converted_params.append(converted)
+
+    return {
+        "structId": struct_id_text(struct_doc),
+        "type": "Struct",
+        "value": converted_params,
+    }
+
+
+def normalize_export_data_json(
+    data_json: dict[str, Any],
+    structs_doc: dict[str, Any],
+    selected_struct_doc: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    if is_keyed_export_json(data_json):
+        struct_doc = selected_struct_doc or find_struct_doc_by_name_or_id(structs_doc, data_json.get("name"))
+        if struct_doc is None:
+            raise ValueError(f"找不到导出变量 JSON 对应的结构体：{data_json.get('name')}")
+        reorder_struct_fields_from_keyed_export(struct_doc, data_json)
+        return keyed_export_to_data_json(data_json, struct_doc, structs_doc)
+    return data_json
+
+
 def coerce_widget_value(type_code: int, raw_value: Any) -> Any:
     if type_code in (3, 17, 20, 21):
         return int(raw_value or 0)
@@ -1042,7 +1157,7 @@ def data_json_to_struct_value(
 def struct_order_is_extracted(struct_doc: dict[str, Any], structs_doc: dict[str, Any]) -> bool:
     if structs_doc.get("source_format") != "gia":
         return True
-    return struct_doc.get("layout_source") == "gia_inline_layout"
+    return struct_doc.get("layout_source") in ("gia_inline_layout", "keyed_export_json")
 
 
 def param_at(data_json: dict[str, Any] | None, index: int) -> dict[str, Any] | None:
@@ -1880,10 +1995,11 @@ def page_import_variables() -> None:
         try:
             raw_data = data_upload.getvalue()
             initial_data_json = json.loads(decode_text_bytes(raw_data))
-            if not isinstance(initial_data_json, dict) or not initial_data_json.get("structId"):
-                raise ValueError("数据 JSON 必须是 P2Gia 同格式对象，并包含 structId。")
+            if not isinstance(initial_data_json, dict) or not (initial_data_json.get("structId") or is_keyed_export_json(initial_data_json)):
+                raise ValueError("数据 JSON 必须是 P2Gia 同格式对象，或包含 key 字段的导出变量 JSON。")
             initial_data_token = hashlib.sha1(raw_data).hexdigest()[:12]
-            st.success(f"已读取初始数据：structId={initial_data_json.get('structId')}")
+            identity = initial_data_json.get("structId") or initial_data_json.get("name") or "unknown"
+            st.success(f"已读取初始数据：{identity}")
         except Exception as exc:
             st.error(f"数据结构 JSON 解析失败：{exc}")
             initial_data_json = None
@@ -1896,9 +2012,10 @@ def page_import_variables() -> None:
     ]
     default_struct_index = 0
     if initial_data_json:
-        initial_struct_id = str(initial_data_json.get("structId"))
+        initial_struct_id = str(initial_data_json.get("structId") or "")
+        initial_struct_name = str(initial_data_json.get("name") or "")
         for index, item in enumerate(structs_doc.get("structs", [])):
-            if str(item.get("id")) == initial_struct_id:
+            if str(item.get("id")) == initial_struct_id or str(item.get("name")) == initial_struct_name:
                 default_struct_index = index
                 break
     selected_struct = st.selectbox(
@@ -1911,6 +2028,13 @@ def page_import_variables() -> None:
     if not selected_struct_doc:
         st.error("未找到选中的结构体。")
         return
+
+    if initial_data_json:
+        try:
+            initial_data_json = normalize_export_data_json(initial_data_json, structs_doc, selected_struct_doc)
+        except Exception as exc:
+            st.error(f"导出变量 JSON 无法用于当前结构体：{exc}")
+            return
 
     order_problems = collect_unverified_order_structs(selected_struct_doc, structs_doc, initial_data_json)
     if order_problems:
